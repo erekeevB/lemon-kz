@@ -1,4 +1,4 @@
-import { deleteUserAPI, getUsersAPI } from "../API/adminAPI";
+import { deleteUserAPI, getUsersAPI } from "../api/adminAPI";
 
 const SET_USERS = 'SET_USERS';
 const DELETE_USER = 'DELETE_USER';

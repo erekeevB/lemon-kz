@@ -1,4 +1,4 @@
-import { addReservationAPI, currentUserAPI, getReservationAPI, loginAPI, logoutAPI, registerAPI } from "../API/authAPI";
+import { addReservationAPI, currentUserAPI, getReservationAPI, loginAPI, logoutAPI, registerAPI } from "../api/authAPI";
 
 const SET_AUTH = 'SET_AUTH';
 const SET_ERROR = 'SET_ERROR';
@@ -9,18 +9,19 @@ const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
 let initialState = {
 
     profile: {
-        id: '',
-        username: '',
-        email: '',
-        phoneNumber: '',
-        role: '',
-        hotelId: '',
-        currentReservations: [],
-        pastReservations: []
+        id: null,
+        name: null,
+        surname: null,
+        thirdname: null,
+        email: null,
+        phoneNumber: null,
+        role: null,
+        img: null,
+        sex: null
     },
     isAuth: 0,
     isFetching: false,
-    error: ''
+    error: null
 
 }
 
@@ -110,7 +111,8 @@ const setTempProfile = (dispatch, data) => {
 
     let tempProfile = {
         id: data.id,
-        username: data.username,
+        name: data.name,
+        surname: data.surname,
         email: data.email,
         phoneNumber: data.phoneNumber,
         // role: role
@@ -134,10 +136,11 @@ export const getSetAuthThunk = () => (dispatch) => {
 
     setTempProfile(dispatch, {
         id: 1,
-        username: 'adsfa',
+        name: 'adsfa',
+        surname: 'asdasd',
         email: 'afdad',
         phoneNumber: '3453453',
-        role: 'DeskClerk'
+        role: 'Admin'
     });
 
     
@@ -176,7 +179,8 @@ export const loginUserThunk = (profile) => (dispatch) => {
 
     setTempProfile(dispatch, {
         id: 1,
-        username: 'adsfa',
+        name: 'adsfa',
+        surname: 'asdads',
         email: 'afdad',
         phoneNumber: '3453453',
         role: 'Manager'

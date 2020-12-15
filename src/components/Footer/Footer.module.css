@@ -1,0 +1,20 @@
+.footer__wrapper {
+
+    background-color: black;
+    color: white;
+    padding: 20px 0;
+
+}
+
+.footer{
+
+    width: 1000px;
+    margin: 0 auto;
+
+}
+
+.footer ul li{
+
+    text-align: start;
+
+}

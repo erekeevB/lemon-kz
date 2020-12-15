@@ -1,4 +1,4 @@
-import { getCityListAPI, getSearchResultAPI } from "../API/searchAPI";
+import { getCityListAPI, getSearchResultAPI } from "../api/searchAPI";
 
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
 

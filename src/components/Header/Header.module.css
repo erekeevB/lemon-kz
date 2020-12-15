@@ -1,0 +1,29 @@
+.header__wrapper {
+
+    position: sticky;
+    top: 0%;
+    background-color: #282c34;
+    height: 60px;
+    color: white;
+
+}
+
+.preHeader {
+
+    display: flex;
+    width: 10px;
+    background-color: white;
+    font-size: 0.7rem;
+
+}
+
+.header{
+
+    margin: 0 auto;
+    height: 100%;
+    width: 1000px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+}
