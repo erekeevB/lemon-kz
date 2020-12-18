@@ -115,6 +115,7 @@ const setTempProfile = (dispatch, data) => {
         surname: data.surname,
         email: data.email,
         phoneNumber: data.phoneNumber,
+        sex: data.sex,
         // role: role
         role: data.role
     };
@@ -183,7 +184,8 @@ export const loginUserThunk = (profile) => (dispatch) => {
         surname: 'asdads',
         email: 'afdad',
         phoneNumber: '3453453',
-        role: 'Manager'
+        role: 'Manager',
+        sex: 'm'
     });  
 
     // loginAPI(profile)
@@ -267,44 +269,9 @@ export const logoutThunk = () => (dispatch) => {
 
 }
 
-export const getSetReservationThunk = () => (dispatch) => {
+export const editProfileThunk = (profile) => (dispatch) => {
 
-    // getReservationAPI()
-    //     .then((data)=>{
-
-    //         if(data.status==0){
-    //             setReservations(data.currentReservations, data.pastReservations)
-    //         }else{
-    //             setReservations([], [])
-    //         }
-
-    //     })
-    //     .catch(()=>{
-    //         setReservations([], [])
-    //     })
-
-}
-
-export const addReservationThunk = (reservation) => (dispatch) => {
-
-    dispatch(addReservation({...reservation, roomNumber: 20}))
-
-
-    // addReservationAPI(reservation)
-    //     .then((data)=>{
-
-    //         if(data.status==0){
-    //             dispatch(addReservation({
-    //                 ...reservation,
-    //                 roomNumber: data.reservation.room.roomNumber,
-    //                 hotelName: data.hotelName
-    //             }))
-    //         }
-
-    //     })
-    //     .catch(()=>{
-
-    //     })
+    setTempProfile(dispatch, profile); 
 
 }
 

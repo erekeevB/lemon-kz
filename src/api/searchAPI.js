@@ -1,8 +1,8 @@
 import {Ajax} from './axiosCreater';
 
-export const getCityListAPI = () => {
+export const getClothesList = () => {
 
-    return Ajax.get('/hotel/cities').then(data=>data.data)
+    return Ajax.get('carts').then(data=>data)
 
 }
 

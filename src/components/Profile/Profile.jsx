@@ -5,9 +5,9 @@ import s from './Profile.module.css'
 import ProfilePhoto from './../../assets/profilePhoto.png'
 import { Field, Form, Formik } from 'formik'
 import InputComponent from '../Authentification/InputComponent'
+import { editProfileThunk } from '../../redux/authReducer'
 
-const Profile = ({ profile, isAuth, ...props }) => {
-    debugger
+const Profile = ({ profile, isAuth, editProfileThunk, ...props }) => {
     return (
         <>
             {!isAuth && <Redirect to='/' />}
@@ -16,6 +16,7 @@ const Profile = ({ profile, isAuth, ...props }) => {
                 <div className={s.profile__photo}><img src={ProfilePhoto} alt="Profile" /></div>
                 <div>
                     <div>{profile.name} {profile.surname} {profile.thirdname && profile.thirdname}</div>
+                    <div>Email: {profile.email}</div>
                     {profile.role !== 'user' &&
                         <div>
                             Роль: {profile.role}
@@ -28,29 +29,37 @@ const Profile = ({ profile, isAuth, ...props }) => {
                     name: profile.name,
                     surname: profile.surname,
                     thirdname: profile.thirdname,
-                    email: profile.email,
                     phoneNumber: profile.phoneNumber,
                     sex: profile.sex
                 }}
                 validate={values => {
                     const errors = {};
-                    if (!values.email) {
-                        errors.email = 'Required';
-                    } else if (
-                        !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
-                    ) {
-                        errors.email = 'Invalid email address';
+                    if (!values.name) {
+                        errors.name = 'Required';
+                    }
+                    if (!values.surname) {
+                        errors.surname = 'Required';
+                    }
+                    if (!values.thirdname) {
+                        errors.thirdname = 'Required';
+                    }
+                    if (!values.name) {
+                        errors.name = 'Required';
+                    }
+                    if (!values.sex) {
+                        errors.sex = 'Required';
                     }
                     return errors;
                 }}
                 onSubmit={(values, { setSubmitting }) => {
+                    debugger
                     setSubmitting(true);
-                    alert(JSON.stringify(values, null, 2));
+                    // alert(JSON.stringify(values, null, 2));
                     setSubmitting(false);
                 }}
 
             >
-                {({ isSubmitting }) => (
+                {({ isSubmitting, values }) => (
                     <Form className={s.profile__form}>
                         <div className={s.profile__nameForm}>
                             <div className={s.profile__name} >
@@ -66,13 +75,34 @@ const Profile = ({ profile, isAuth, ...props }) => {
                                 <Field name='thirdname' type='text' placeholder='Отчество' component={InputComponent} />
                             </div>
                         </div>
-                        <label>
-                            <Field type="radio" name="sex" value="m" />
-                            Мужской
-                            <Field type="radio" name="sex" value="j" />
-                            Женский
-                        </label>
-                        <button>Сохранить</button>
+                        <div className={s.profile__radioWrapper}>
+                            <Field 
+                                id='m'
+                                className={s.profile__radio}
+                                type="radio"
+                                name="sex"
+                                value="m"
+                                checked={values.sex === 'm'}
+                            />
+                            <label className={s.profile__radioLabel} for='m'>
+                                Мужской
+                            </label>
+                            <Field 
+                                id='j' 
+                                className={s.profile__radio} 
+                                type="radio" 
+                                name="sex" 
+                                value="j"
+                                checked={values.sex === 'j'}
+                            />
+                            <label className={s.profile__radioLabel} for='j'>
+                                Женский
+                            </label>
+                        </div>
+                        <div className={s.profile__button}>
+                            <button className={s.profile__buttonButton} type="submit">Сохранить</button>
+                            <span className={s.profile__buttonFiller}></span>
+                        </div>
                     </Form>
                 )}
             </Formik>
@@ -87,5 +117,4 @@ const mStP = (state) => ({
     profile: state.auth.profile
 
 })
-
-export default connect(mStP, {})(Profile)
+export default connect(mStP, {editProfileThunk})(Profile)

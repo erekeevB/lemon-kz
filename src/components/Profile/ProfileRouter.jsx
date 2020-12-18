@@ -5,7 +5,6 @@ import Profile from './Profile'
 import s from './Profile.module.css'
 
 const ProfileRouter = ({isAuth, ...props}) => {
-    debugger
     return (
         <>
         {!isAuth && <Redirect to='/' />}
