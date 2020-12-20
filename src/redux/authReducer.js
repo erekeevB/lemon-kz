@@ -1,9 +1,11 @@
 import { addReservationAPI, currentUserAPI, getReservationAPI, loginAPI, logoutAPI, registerAPI } from "../api/authAPI";
 
 const SET_AUTH = 'SET_AUTH';
+const EDIT_PROFILE = 'EDIT_PROFILE';
+const SET_FAVOURITES = 'SET_FAVOURITES';
+const ADD_FAVOURITE = 'ADD_FAVOURITE';
+const DELETE_FAVOURITE = 'DELETE_FAVOURITE';
 const SET_ERROR = 'SET_ERROR';
-const ADD_RESERVATION = 'ADD_RESERVATION';
-const SET_RESERVATIONS = 'SET_RESERVATIONs';
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
 
 let initialState = {
@@ -19,6 +21,7 @@ let initialState = {
         img: null,
         sex: null
     },
+    favourites: {},
     isAuth: 0,
     isFetching: false,
     error: null
@@ -31,32 +34,33 @@ const authReducer = (state = initialState, action) => {
 
         case SET_AUTH: {
             return {
-
                 ...state,
                 profile: {...action.profile},
                 isAuth: action.isAuth
-
             }
         }
-        case SET_RESERVATIONS: {
+        case EDIT_PROFILE: {
             return {
                 ...state,
-                profile: {
-                    ...state.profile,
-                    currentReservations: [...action.reservation.current],
-                    pastReservations: [...action.reservation.past]
-                }
+                profile: {...state.profile, ...action.profile}
             }
         }
-        case ADD_RESERVATION: {
+        case SET_FAVOURITES: {
             return {
                 ...state,
-                profile: {
-                    ...state.profile,
-                    currentReservations:
-                        state.profile.currentReservations ?
-                        [...state.profile.currentReservations, action.current] : [action.current]
-                }
+                favourites: [...action.favourites]
+            }
+        }
+        case ADD_FAVOURITE: {
+            return {
+                ...state,
+                favourites: [...state.favourites, action.favourite]
+            }
+        }
+        case DELETE_FAVOURITE: {
+            return {
+                ...state,
+                favourites: state.favourites.filter((el)=>el.id !== action.favourite.id)
             }
         }
         case SET_ERROR: {
@@ -66,12 +70,10 @@ const authReducer = (state = initialState, action) => {
             }
         }
         case TOGGLE_IS_FETCHING: {
-
             return {
                 ...state,
                 isFetching: action.isFetching
             }
-
         }
         default:
             return state;
@@ -125,9 +127,13 @@ const setTempProfile = (dispatch, data) => {
 
 export const setAuth = (profile, isAuth) => ({ type: SET_AUTH, profile, isAuth });
 
-export const addReservation = (current) => ({type: ADD_RESERVATION, current})
+export const editProfile = (profile) => ({ type: EDIT_PROFILE, profile });
 
-export const setReservations = (current, past) => ({type: SET_RESERVATIONS, current, past})
+export const setFavourites = (favourites) => ({ type: SET_FAVOURITES, favourites });
+
+export const addFavourite = (favourite) => ({ type: ADD_FAVOURITE, favourite });
+
+export const deleteFavourite = (favourite) => ({ type: DELETE_FAVOURITE, favourite });
 
 export const setError = (error) => ({ type: SET_ERROR, error })
 
@@ -184,8 +190,7 @@ export const loginUserThunk = (profile) => (dispatch) => {
         surname: 'asdads',
         email: 'afdad',
         phoneNumber: '3453453',
-        role: 'Manager',
-        sex: 'm'
+        role: 'Manager'
     });  
 
     // loginAPI(profile)
@@ -218,6 +223,13 @@ export const loginUserThunk = (profile) => (dispatch) => {
 }
 
 export const registerUserThunk = (profile) => (dispatch) => {
+
+    setTempProfile(dispatch, {
+        ...profile, 
+        id: 1, 
+        phoneNumber: '3453453',
+        role: 'Manager'
+    })
 
     // registerAPI(profile)
     //     .then(data => {
@@ -271,7 +283,7 @@ export const logoutThunk = () => (dispatch) => {
 
 export const editProfileThunk = (profile) => (dispatch) => {
 
-    setTempProfile(dispatch, profile); 
+    editProfile(profile); 
 
 }
 

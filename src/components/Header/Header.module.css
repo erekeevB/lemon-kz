@@ -2,19 +2,11 @@
 
     position: sticky;
     top: 0%;
-    background-color: #282c34;
-    height: 60px;
-    color: white;
-    z-index: 100;
-
-}
-
-.preHeader {
-
-    display: flex;
-    width: 10px;
     background-color: white;
-    font-size: 0.7rem;
+    border-bottom: 2px solid black;
+    height: 80px;
+    color: black;
+    z-index: 100;
 
 }
 
@@ -22,9 +14,25 @@
 
     margin: 0 auto;
     height: 100%;
-    width: 1000px;
+    max-width: 1000px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+}
+
+.header__header {
+
+    font-size: 1.2rem;
+    font-weight: 700;
+
+}
+
+.header__right{
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    column-gap: 20px;
 
 }

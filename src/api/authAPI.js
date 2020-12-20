@@ -24,14 +24,8 @@ export const currentUserAPI = () => {
 
 }
 
-export const getReservationAPI = () => {
+export const getFavouritesAPI = () => {
 
-    return Ajax.get('./reserve/getallreservations').then(data=>data.data)
-
-}
-
-export const addReservationAPI = (reservation) => {
-
-    return Ajax.post('/reserve/addreservation', {...reservation}).then(data=>data.data)
+    return Ajax.get('products?limit=5').then(data=>data)
 
 }

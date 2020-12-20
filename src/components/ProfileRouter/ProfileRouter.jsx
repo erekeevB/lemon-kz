@@ -1,8 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { NavLink, Redirect, Route, Switch } from 'react-router-dom'
-import Profile from './Profile'
-import s from './Profile.module.css'
+import Profile from './Profile/Profile'
+import s from './ProfileRouter.module.css'
 
 const ProfileRouter = ({isAuth, ...props}) => {
     return (
@@ -10,8 +10,8 @@ const ProfileRouter = ({isAuth, ...props}) => {
         {!isAuth && <Redirect to='/' />}
         <div className={s.profile__wrapper}>
             <nav className={s.profile__nav}>
-                <NavLink to='/profile'>Мои данные</NavLink>
-                <NavLink to='/profile/favorites'>Избранные</NavLink>
+                <NavLink activeClassName={s.profile__nav__active} exact to='/profile'>Мои данные</NavLink>
+                <NavLink activeClassName={s.profile__nav__active} to='/profile/favorites'>Избранные</NavLink>
             </nav>
             <div className={s.profile__container}>
                 <Switch>

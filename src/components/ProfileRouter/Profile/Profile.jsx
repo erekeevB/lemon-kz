@@ -2,10 +2,10 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import s from './Profile.module.css'
-import ProfilePhoto from './../../assets/profilePhoto.png'
+import ProfilePhoto from './../../../assets/profilePhoto.png'
 import { Field, Form, Formik } from 'formik'
-import InputComponent from '../Authentification/InputComponent'
-import { editProfileThunk } from '../../redux/authReducer'
+import InputComponent from '../../InputComponent/InputComponent';
+import { editProfileThunk } from '../../../redux/authReducer'
 
 const Profile = ({ profile, isAuth, editProfileThunk, ...props }) => {
     return (
@@ -15,7 +15,7 @@ const Profile = ({ profile, isAuth, editProfileThunk, ...props }) => {
             <div className={s.profile__info}>
                 <div className={s.profile__photo}><img src={ProfilePhoto} alt="Profile" /></div>
                 <div>
-                    <div>{profile.name} {profile.surname} {profile.thirdname && profile.thirdname}</div>
+                    <div className={s.profile__name}>{profile.name} {profile.surname} {profile.thirdname && profile.thirdname}</div>
                     <div>Email: {profile.email}</div>
                     {profile.role !== 'user' &&
                         <div>
@@ -62,47 +62,51 @@ const Profile = ({ profile, isAuth, editProfileThunk, ...props }) => {
                 {({ isSubmitting, values }) => (
                     <Form className={s.profile__form}>
                         <div className={s.profile__nameForm}>
-                            <div className={s.profile__name} >
+                            <div className={s.profile__nameForm__header} >
                                 <p>Имя</p>
                                 <Field name='name' type='text' placeholder='Имя' component={InputComponent} />
                             </div>
-                            <div className={s.profile__name} >
+                            <div className={s.profile__nameForm__header} >
                                 <p>Фамилия</p>
                                 <Field name='surname' type='text' placeholder='Фамилия' component={InputComponent} />
                             </div>
-                            <div className={s.profile__name} >
+                            <div className={s.profile__nameForm__header} >
                                 <p>Отчество</p>
                                 <Field name='thirdname' type='text' placeholder='Отчество' component={InputComponent} />
                             </div>
                         </div>
-                        <div className={s.profile__radioWrapper}>
-                            <Field 
-                                id='m'
-                                className={s.profile__radio}
-                                type="radio"
-                                name="sex"
-                                value="m"
-                                checked={values.sex === 'm'}
-                            />
-                            <label className={s.profile__radioLabel} for='m'>
-                                Мужской
-                            </label>
-                            <Field 
-                                id='j' 
-                                className={s.profile__radio} 
-                                type="radio" 
-                                name="sex" 
-                                value="j"
-                                checked={values.sex === 'j'}
-                            />
-                            <label className={s.profile__radioLabel} for='j'>
-                                Женский
-                            </label>
+                        <div className={s.profile__radioWrapper__parent}>
+                            <div className={s.profile__radioWrapper}>
+                                <span className={s.profile__radioFiller}></span>
+                                <Field
+                                    id='m'
+                                    className={s.profile__radio}
+                                    type="radio"
+                                    name="sex"
+                                    value="m"
+                                    checked={values.sex === 'm'}
+                                />
+                                <label className={s.profile__radioLabel + ' ' + s.profile__radioLabel_first} for='m'>
+                                    Мужской
+                                </label>
+                                <Field
+                                    id='j'
+                                    className={s.profile__radio}
+                                    type="radio"
+                                    name="sex"
+                                    value="j"
+                                    checked={values.sex === 'j'}
+                                />
+                                <label className={s.profile__radioLabel} for='j'>
+                                    Женский
+                                </label>
+                            </div>
                         </div>
                         <div className={s.profile__button}>
                             <button className={s.profile__buttonButton} type="submit">Сохранить</button>
                             <span className={s.profile__buttonFiller}></span>
                         </div>
+
                     </Form>
                 )}
             </Formik>
@@ -117,4 +121,4 @@ const mStP = (state) => ({
     profile: state.auth.profile
 
 })
-export default connect(mStP, {editProfileThunk})(Profile)
+export default connect(mStP, { editProfileThunk })(Profile)

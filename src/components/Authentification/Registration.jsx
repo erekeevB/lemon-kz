@@ -2,7 +2,7 @@ import { ErrorMessage, Field, Form, Formik } from 'formik';
 import React from 'react';
 import { CloseIcon } from '../../assets/Icons';
 import s from './Authentication.module.css';
-import InputComponent from './InputComponent';
+import InputComponent from '../InputComponent/InputComponent';
 
 const Registration = ({registerUserThunk, closeAuth, error}) => {
 

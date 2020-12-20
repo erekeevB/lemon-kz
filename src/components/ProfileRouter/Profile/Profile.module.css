@@ -1,0 +1,190 @@
+.profile__header {
+
+    margin-bottom: 20px;
+
+}
+
+.profile__info {
+
+    border-bottom: dashed 2px black;
+    padding: 10px;
+    padding-bottom: 25px;
+    height: 124px;
+    display: flex;
+    align-items: center;
+    column-gap: 20px;
+    margin-bottom: 25px;
+
+}
+
+.profile__name {
+
+    font-weight: 700;
+    font-size: 1.2rem;
+
+}
+
+.profile__photo {
+
+    height: 100px;
+
+}
+
+.profile__photo img {
+
+    height: 100%;
+
+}
+
+.profile__nameForm {
+
+    display: flex;
+    justify-content: space-between;
+    column-gap: 15px;
+    margin: 15px 0;
+
+}
+
+.profile__nameForm__header p {
+
+    font-weight: 700;
+
+}
+
+.profile__radioWrapper__parent {
+
+    position: relative;
+    z-index: 1;
+
+}
+
+.profile__radioWrapper {
+
+    position: relative;
+    width: fit-content;
+    height: fit-content;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border: 2px solid black;
+    border-radius: 5px;
+    outline: none;
+    background-color: white;
+
+}
+
+.profile__radioFiller {
+
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    background-color: blue;
+    border-radius: 5px;
+    opacity: 1;
+    pointer-events: none;
+    z-index: -1;
+
+}
+
+.profile__radioLabel:focus + .profile__radioFiller {
+
+    opacity: 1;
+
+}
+
+.profile__radioLabel {
+
+    cursor: pointer;
+    width: 100px;
+    text-align: center !important;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 5px 0;
+    border: none;
+
+}
+
+.profile__radioLabel_first {
+
+    border-right: 2px solid black;
+    width: 102px;
+
+}
+
+.profile__radio{
+
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+
+}
+
+.profile__radio:checked + .profile__radioLabel{
+
+    color: blue;
+    
+}
+
+.profile__button {
+
+    margin-top: 25px;
+    width: 120px;
+    height: 40px;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 5px;
+
+}
+
+.profile__buttonButton {
+
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    padding: 10px 15px;
+    background: rgb(255, 255, 255);
+    border: 2px solid black;
+    border-radius: 5px;
+    outline: none;
+    font-size: 1rem;
+    font-weight: 700;
+    color: black;
+    z-index: 2;
+
+}
+
+.profile__buttonButton:hover {
+
+    background-color: rgb(216, 216, 216);
+
+}
+
+.profile__buttonButton:focus {
+
+    border: 2px dashed black;
+
+}
+
+.profile__buttonButton:active {
+
+    transform: translate(4px, 4px);
+
+}
+
+.profile__buttonFiller {
+
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 4px;
+    left: 4px;
+    z-index: 1;
+    background: blue;
+    border-radius: 5px;
+
+}
