@@ -54,12 +54,13 @@ const Profile = ({ profile, isAuth, editProfileThunk, ...props }) => {
                 onSubmit={(values, { setSubmitting }) => {
                     debugger
                     setSubmitting(true);
+                    editProfileThunk(values);
                     // alert(JSON.stringify(values, null, 2));
                     setSubmitting(false);
                 }}
 
             >
-                {({ isSubmitting, values }) => (
+                {({ isSubmitting, values, errors, touched }) => (
                     <Form className={s.profile__form}>
                         <div className={s.profile__nameForm}>
                             <div className={s.profile__nameForm__header} >
@@ -77,7 +78,11 @@ const Profile = ({ profile, isAuth, editProfileThunk, ...props }) => {
                         </div>
                         <div className={s.profile__radioWrapper__parent}>
                             <div className={s.profile__radioWrapper}>
-                                <span className={s.profile__radioFiller}></span>
+                                <span 
+                                    className={touched.sex && errors.sex ? 
+                                        s.profile__radioFiller + ' ' + s.profile__radioFiller_error : 
+                                        s.profile__radioFiller}
+                                > </span>
                                 <Field
                                     id='m'
                                     className={s.profile__radio}

@@ -18,24 +18,22 @@
 
 .profile__nav {
 
-    width: calc(1000px*0.3 - 30px);
-    display: flex;
-    flex-direction: column;
-    height: fit-content;
     border: 2px solid black;
+    width: 100%;
     border-radius: 5px;
-    overflow: hidden;
+    background: none;
+    padding: 5px;
 
 }
 
-.profile__nav>a{
+.profile__nav a{
 
-    display: inline-block;
+    display: block;
     padding: 10px;
 
 }
 
-.profile__nav>a.profile__nav__active{
+.profile__nav a.profile__nav__active{
 
     background: black;
     color: white;

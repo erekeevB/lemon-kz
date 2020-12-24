@@ -10,8 +10,10 @@ const ProfileRouter = ({isAuth, ...props}) => {
         {!isAuth && <Redirect to='/' />}
         <div className={s.profile__wrapper}>
             <nav className={s.profile__nav}>
-                <NavLink activeClassName={s.profile__nav__active} exact to='/profile'>Мои данные</NavLink>
-                <NavLink activeClassName={s.profile__nav__active} to='/profile/favorites'>Избранные</NavLink>
+                <div>
+                    <NavLink activeClassName={s.profile__nav__active} exact to='/profile'>Мои данные</NavLink>
+                    <NavLink activeClassName={s.profile__nav__active} to='/profile/favorites'>Избранные</NavLink>
+                </div>
             </nav>
             <div className={s.profile__container}>
                 <Switch>

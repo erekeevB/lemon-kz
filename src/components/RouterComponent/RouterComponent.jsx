@@ -9,8 +9,8 @@ const RouterComponent = () => {
     return (
         <div className={s.router}>
             <Switch>
-                <Route path='/' exact render={() => <Main />} />
                 <Route path='/profile' render={() => <ProfileRouter />} />
+                <Route path='/' render={() => <Main />} />
             </Switch>
         </div>
     )

@@ -77,19 +77,26 @@
 .profile__radioFiller {
 
     position: absolute;
-    top: 3px;
-    left: 3px;
+    top: 2px;
+    left: 2px;
     width: calc(100% + 4px);
     height: calc(100% + 4px);
     background-color: blue;
     border-radius: 5px;
-    opacity: 1;
     pointer-events: none;
+    opacity: 0;
     z-index: -1;
 
 }
 
-.profile__radioLabel:focus + .profile__radioFiller {
+.profile__radioFiller_error.profile__radioFiller {
+
+    background-color: red;
+    opacity: 1;
+
+}
+
+.profile__radioWrapper:focus-within .profile__radioFiller {
 
     opacity: 1;
 

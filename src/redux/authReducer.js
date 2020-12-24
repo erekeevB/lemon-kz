@@ -283,7 +283,8 @@ export const logoutThunk = () => (dispatch) => {
 
 export const editProfileThunk = (profile) => (dispatch) => {
 
-    editProfile(profile); 
+    debugger
+    dispatch(editProfile(profile)); 
 
 }
 

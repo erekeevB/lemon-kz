@@ -8,3 +8,10 @@
     box-sizing: border-box;
     -webkit-box-sizing: border-box;
 }
+
+button{
+
+    border: none;
+    background: none;
+
+}
