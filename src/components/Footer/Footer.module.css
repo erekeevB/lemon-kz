@@ -1,8 +1,8 @@
 .footer__wrapper {
 
-    background-color: black;
+    background-color: orange;
     color: white;
-    padding: 20px 0;
+    padding: 50px 0;
 
 }
 
@@ -13,8 +13,16 @@
 
 }
 
-.footer ul li{
+.footer>ul>li{
 
     text-align: start;
+    margin: 5px 0;
+
+}
+
+.footer>ul>li>a{
+
+    color: white;
+    font-weight: 700;
 
 }

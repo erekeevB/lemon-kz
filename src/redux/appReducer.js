@@ -1,5 +1,4 @@
 import { getSetAuthThunk } from "./authReducer";
-import { getSetCitiesThunk } from "./searchReducer";
 
 const INITIALIZE = 'INITIALIZE';
 
@@ -50,8 +49,6 @@ export const initializeThunk = () => (dispatch) => {
 
 
     dispatch(getSetAuthThunk())
-
-    dispatch(getSetCitiesThunk());
 
     dispatch(initialize())
 

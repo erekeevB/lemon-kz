@@ -1,13 +1,21 @@
 import {Ajax} from './axiosCreater';
 
-export const getClothesList = () => {
+export const getSearchResultAPI = (isAll, categoryName) => {
 
-    return Ajax.get('carts').then(data=>data)
+    if(isAll){
+        return Ajax.get('/products').then(data=>data.data)
+    }else{
+        if(categoryName === 'men' || categoryName === 'women') {
+            return Ajax.get('/products/category/' + categoryName + ' clothing').then(data=>data.data)
+        }else{
+            return Ajax.get('/products/category/' + categoryName).then(data=>data.data)
+        }
+    }
 
 }
 
-export const getSearchResultAPI = (form) => {
+export const getItemAPI = (id) => {
 
-    return Ajax.get('/reserve/findrooms-withindate', {...form}).then(data=>data.data)
+    return Ajax.get('/products/' + id).then(data=>data.data)
 
 }

@@ -24,44 +24,53 @@ const SliderElem = ({
 
 }
 
-const SliderContainer = ({objects, className, period}) => {
+const SliderContainer = ({objects, className, period, afterClickPeriod}) => {
 
     let [currEl, setCurrEl] = useState(0)
 
     let [isTouched, setIsTouched] = useState(false)
 
-    let timerId = useRef()
+    let [intervalId, setIntervalId] = useState()
 
     useEffect(()=>{
-        debugger
-        timerId.current = setInterval(()=>{
-            debugger
-            setNext()
-        }, period*1000)
 
-    }, [])
+        if(!isTouched){
+            // debugger
+            setIntervalId(setInterval(() => {
+                setNext()
+            }, period * 1000))
+        }else{
+            // debugger
+            clearInterval(intervalId)
+            setTimeout(()=>{
+                setIsTouched(false)
+            }, afterClickPeriod * 1000)
+        }
 
-    useEffect(()=>{
-        clearInterval(timerId.current)
     }, [isTouched])
 
     const setPrev = () => {
 
-        if(currEl === 0){
-            setCurrEl(objects.length-1)
-        }else{
-            setCurrEl(currEl - 1)
-        }
+        setCurrEl(currEl => {
+            if(currEl === 0){
+                return objects.length - 1
+            }else{
+                return currEl - 1
+            }
+        })
 
     }
 
     const setNext = () => {
 
-        if(currEl === objects.length - 1){
-            setCurrEl(0)
-        }else{
-            setCurrEl(currEl + 1)
-        }
+        // debugger
+        setCurrEl(currEl => {
+            if(currEl === objects.length - 1){
+                return 0
+            }else{
+                return currEl + 1
+            }
+        })
 
     }
 

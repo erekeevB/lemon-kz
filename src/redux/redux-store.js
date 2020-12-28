@@ -1,16 +1,14 @@
 import authReducer from './authReducer';
 import thunkMiddleware from 'redux-thunk';
-import adminReducer from './adminReducer';
 import appReducer from './appReducer';
-import searchReducer from './searchReducer';
+import categoryReducer from './categoryReducer';
 
 const { createStore, combineReducers, applyMiddleware } = require("redux");
 
 let reducers = combineReducers({
 
     auth: authReducer,
-    admin: adminReducer,
-    search: searchReducer,
+    category: categoryReducer,
     app: appReducer
     
 })
