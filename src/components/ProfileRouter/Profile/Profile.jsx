@@ -55,7 +55,6 @@ const Profile = ({ profile, isAuth, editProfileThunk, ...props }) => {
                     debugger
                     setSubmitting(true);
                     editProfileThunk(values);
-                    // alert(JSON.stringify(values, null, 2));
                     setSubmitting(false);
                 }}
 
@@ -91,7 +90,10 @@ const Profile = ({ profile, isAuth, editProfileThunk, ...props }) => {
                                     value="m"
                                     checked={values.sex === 'm'}
                                 />
-                                <label className={s.profile__radioLabel + ' ' + s.profile__radioLabel_first} for='m'>
+                                <label 
+                                    className={s.profile__radioLabel + ' ' + s.profile__radioLabel_first} 
+                                    htmlFor='m'
+                                >
                                     Мужской
                                 </label>
                                 <Field
@@ -102,7 +104,7 @@ const Profile = ({ profile, isAuth, editProfileThunk, ...props }) => {
                                     value="j"
                                     checked={values.sex === 'j'}
                                 />
-                                <label className={s.profile__radioLabel} for='j'>
+                                <label className={s.profile__radioLabel} htmlFor='j'>
                                     Женский
                                 </label>
                             </div>

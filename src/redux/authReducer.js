@@ -1,12 +1,12 @@
-import { addReservationAPI, currentUserAPI, getReservationAPI, loginAPI, logoutAPI, registerAPI } from "../api/authAPI";
+import { getFavouritesAPI } from "../api/authAPI";
 
 const SET_AUTH = 'SET_AUTH';
 const EDIT_PROFILE = 'EDIT_PROFILE';
 const SET_FAVOURITES = 'SET_FAVOURITES';
-const ADD_FAVOURITE = 'ADD_FAVOURITE';
 const DELETE_FAVOURITE = 'DELETE_FAVOURITE';
 const SET_ERROR = 'SET_ERROR';
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
+const TOGGLE_FAVOURITE = 'TOGGLE_FAVOURITE';
 
 let initialState = {
 
@@ -21,7 +21,7 @@ let initialState = {
         img: null,
         sex: null
     },
-    favourites: {},
+    favourites: [],
     isAuth: 0,
     isFetching: false,
     error: null
@@ -51,16 +51,23 @@ const authReducer = (state = initialState, action) => {
                 favourites: [...action.favourites]
             }
         }
-        case ADD_FAVOURITE: {
-            return {
-                ...state,
-                favourites: [...state.favourites, action.favourite]
-            }
-        }
         case DELETE_FAVOURITE: {
             return {
                 ...state,
-                favourites: state.favourites.filter((el)=>el.id !== action.favourite.id)
+                favourites: state.favourites.filter((el)=>el.id !== action.id)
+            }
+        }
+        case TOGGLE_FAVOURITE: {
+            if(state.favourites.some(el => el.id === action.favourite.id)){
+                return {
+                    ...state,
+                    favourites: state.favourites.filter(el => el.id !== action.favourite.id)
+                }
+            }else{
+                return {
+                    ...state,
+                    favourites: [...state.favourites, action.favourite]
+                }
             }
         }
         case SET_ERROR: {
@@ -118,7 +125,6 @@ const setTempProfile = (dispatch, data) => {
         email: data.email,
         phoneNumber: data.phoneNumber,
         sex: data.sex,
-        // role: role
         role: data.role
     };
     dispatch(setAuth(tempProfile, 1));
@@ -131,15 +137,17 @@ export const editProfile = (profile) => ({ type: EDIT_PROFILE, profile });
 
 export const setFavourites = (favourites) => ({ type: SET_FAVOURITES, favourites });
 
-export const addFavourite = (favourite) => ({ type: ADD_FAVOURITE, favourite });
-
-export const deleteFavourite = (favourite) => ({ type: DELETE_FAVOURITE, favourite });
+export const deleteFavourite = (id) => ({ type: DELETE_FAVOURITE, id });
 
 export const setError = (error) => ({ type: SET_ERROR, error })
 
 export const toggleFetch = (isFetching) => ({ type: TOGGLE_IS_FETCHING, isFetching });
 
+export const toggleFavourite = (favourite) => ({ type: TOGGLE_FAVOURITE, favourite });
+
 export const getSetAuthThunk = () => (dispatch) => {
+
+    dispatch(toggleFetch(true))
 
     setTempProfile(dispatch, {
         id: 1,
@@ -150,75 +158,35 @@ export const getSetAuthThunk = () => (dispatch) => {
         role: 'Admin'
     });
 
-    
-    // dispatch(toggleFetch(true));
-
-    // return currentUserAPI()
-    //     .then((data) => {
-
-    //         dispatch(toggleFetch(false));
-
-    //         if (data.status === 0) {
-
-    //             setTempProfile(dispatch, data.user);
-
-    //         } else {
-
-    //             setNullProfile(dispatch);
-
-    //         }
-
-    //         dispatch(setError(''));
-
-    //     })
-    //     .catch((err) => {
-
-    //         setNullProfile(dispatch);
-
-    //         dispatch(setError(''));
-
-
-    //     })
+    getFavouritesAPI().then((data)=>{
+        if(data){
+            dispatch(setFavourites(data))
+        }
+        dispatch(toggleFetch(false))
+    })
 
 }
 
 export const loginUserThunk = (profile) => (dispatch) => {
 
+    dispatch(toggleFetch(true))
+
     setTempProfile(dispatch, {
         id: 1,
         name: 'adsfa',
         surname: 'asdads',
-        email: 'afdad',
+        email: profile.email,
         phoneNumber: '3453453',
         role: 'Manager'
-    });  
+    });
 
-    // loginAPI(profile)
-    //     .then(data => {
-
-    //         if (data.status === 0) {
-
-    //             setTempProfile(dispatch, data.user);
-
-    //             dispatch(setError(''));
-
-    //         } else {
-
-    //             setNullProfile(dispatch);
-
-    //             dispatch(setError('Invalid Username or Password!'));
-
-    //         }
-
-    //     })
-    //     .catch((err) => {
-
-    //         setNullProfile(dispatch);
-
-    //         dispatch(setError('Something went wrong!'));
-
-
-    //     })
+    getFavouritesAPI().then((data)=>{
+        debugger
+        if(data){
+            dispatch(setFavourites(data))
+        }
+        dispatch(toggleFetch(false))
+    })
 
 }
 
@@ -231,60 +199,31 @@ export const registerUserThunk = (profile) => (dispatch) => {
         role: 'Manager'
     })
 
-    // registerAPI(profile)
-    //     .then(data => {
-
-    //         if (data.status === 0) {
-
-    //             setTempProfile(dispatch, data.user);
-
-    //             dispatch(setError(''));
-
-    //         } else {
-
-    //             setNullProfile(dispatch);
-
-    //             dispatch(setError('This user already exists!'));
-
-    //         }
-
-    //     })
-    //     .catch((err) => {
-
-    //         setNullProfile(dispatch);
-
-    //         dispatch(setError('Something went wrong!'));
-
-    //     })
-
 }
 
 export const logoutThunk = () => (dispatch) => {
 
     setNullProfile(dispatch);
 
-    // logoutAPI()
-    //     .then(()=>{
-
-    //         setNullProfile(dispatch);
-
-    //         dispatch(setError(''));
-
-    //     })
-    //     .catch((err) => {
-
-    //         setNullProfile(dispatch);
-
-    //         dispatch(setError(''));
-
-    //     })
+    dispatch(setFavourites([]))
 
 }
 
 export const editProfileThunk = (profile) => (dispatch) => {
 
-    debugger
     dispatch(editProfile(profile)); 
+
+}
+
+export const toggleFavouriteThunk = (favourite) => (dispatch) => {
+
+    dispatch(toggleFavourite(favourite))
+
+}
+
+export const deleteFavouriteThunk = (favourite) => (dispatch) => {
+
+    dispatch(deleteFavourite(favourite))
 
 }
 

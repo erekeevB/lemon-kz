@@ -27,7 +27,7 @@ const categoryReducer = (state = initialState, action) => {
 
         }
         case TOGGLE_IS_FETCHING: {
-
+            
             return {
                 ...state,
                 isFetching: action.isFetching
@@ -49,17 +49,16 @@ export const setError = (error) => ({ type: SET_ERROR, error });
 
 export const getSetCategoryResultThunk = (isAll, category) => (dispatch) => {
 
-    toggleFetch(true)
+    dispatch(toggleFetch(true))
 
-    getSearchResultAPI(isAll, category).then(data=>{
-        debugger
+    return getSearchResultAPI(isAll, category).then(data=>{
         if(data){
             dispatch(setResult(data))
+            dispatch(setError(''))
+            dispatch(toggleFetch(false))
         }else{
             dispatch(setError('404'))
         }
-
-        toggleFetch(false)
 
     })
 

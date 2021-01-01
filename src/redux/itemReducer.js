@@ -1,8 +1,14 @@
+import { getItemAPI } from "../api/searchAPI";
+
 const SET_ITEM = 'SET_ITEM';
+const TOGGLE_FETCH = 'TOGGLE_FETCH';
+const SET_ERROR = 'SET_ERROR';
 
 let initialState = {
 
-    item: {}
+    item: {},
+    error: '',
+    isFetching: false
 
 }
 
@@ -15,6 +21,18 @@ const itemReducer = (state = initialState, action) => {
                 item: {...action.item}
             }
         }
+        case SET_ERROR: {
+            return {
+                ...state,
+                error: action.error
+            }
+        }
+        case TOGGLE_FETCH: {
+            return {
+                ...state,
+                isFetching: action.bool
+            }
+        }
         default:
             return state;
 
@@ -24,10 +42,20 @@ const itemReducer = (state = initialState, action) => {
 
 export const setItem = (item) => ({type: SET_ITEM, item});
 
+export const setError = (error) => ({ type: SET_ERROR, error });
 
-export const getSetRoomsThunk = (id) => (dispatch) => {
-        
+export const toggleFetch = (bool) => ({ type: TOGGLE_FETCH, bool });
+
+export const getSetItemThunk = (id) => (dispatch) => {
     
+    dispatch(toggleFetch(true))
+
+    getItemAPI(id).then((data)=>{
+        if(data){
+            dispatch(setItem(data))
+        }
+        dispatch(toggleFetch(false))
+    })
 
 }
 

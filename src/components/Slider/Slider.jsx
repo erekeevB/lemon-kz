@@ -1,4 +1,4 @@
-import React, { createRef, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Down } from '../../assets/Icons'
 import s from './Slider.module.css'
@@ -102,8 +102,12 @@ const SliderContainer = ({objects, className, period, afterClickPeriod}) => {
                 <div className={s.slider__bottomNav}>
                     {objects.map((el, index)=>{
                         return(
-                            <button 
-                                onClick={()=>setCurrEl(index)} 
+                            <button
+                                key={el.to}
+                                onClick={()=>{
+                                    setCurrEl(index)
+                                    setIsTouched(true)
+                                }} 
                                 className={index===currEl ? s.slider__bottomNav__button+ ' ' + s.active :
                                 s.slider__bottomNav__button}
                             ></button>

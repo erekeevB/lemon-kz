@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { GlobeIcon, UserIcon } from '../../assets/Icons'
+import { GlobeIcon } from '../../assets/Icons'
 import s from './Header.module.css'
 import Authentication from '../Authentification/Authentication'
 import { connect } from 'react-redux'

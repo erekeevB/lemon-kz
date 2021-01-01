@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { NavLink, Redirect, Route, Switch } from 'react-router-dom'
 import Profile from './Profile/Profile'
+import ProfileFavourites from './ProfileFavourites/ProfileFavourites'
 import s from './ProfileRouter.module.css'
 
 const ProfileRouter = ({isAuth, ...props}) => {
@@ -18,7 +19,7 @@ const ProfileRouter = ({isAuth, ...props}) => {
             <div className={s.profile__container}>
                 <Switch>
                     <Route path='/profile' exact render={()=><Profile />} />
-                    <Route path='/profile/favorites' render={()=><div>A</div>} />
+                    <Route path='/profile/favorites' render={()=><ProfileFavourites />} />
                 </Switch>
             </div>
         </div>
