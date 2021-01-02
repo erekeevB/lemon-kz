@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
-import { CloseIcon, HeartIcon, HeartIconFilled } from '../../assets/Icons';
+import { HeartIcon, HeartIconFilled } from '../../assets/Icons';
 import { toggleFavouriteThunk } from '../../redux/authReducer';
 import { getSetCategoryResultThunk } from '../../redux/categoryReducer';
+import SignInWarning from '../SignInWarning/SignInWarning';
 import s from './CategoryList.module.css'
 
 const CategoryList = ({ 
@@ -19,18 +20,6 @@ const CategoryList = ({
 }) => {
 
     const [isLikeClickedAndNotAuth, setIsLikeClickedAndNotAuth] = useState(false)
-
-    useEffect(()=>{
-        if(isLikeClickedAndNotAuth){
-            setTimeout(()=>{
-                setIsLikeClickedAndNotAuth(bool=>{
-                    if(bool){
-                        return false
-                    }
-                })
-            }, 1000)
-        }
-    }, [isLikeClickedAndNotAuth])
 
     let a = useHistory()
 
@@ -48,15 +37,11 @@ const CategoryList = ({
 
     return (
         <>
-            {isLikeClickedAndNotAuth && 
-                <div className={s.auth_warning}>
-                    <button 
-                        onClick={()=>setIsLikeClickedAndNotAuth(false)} 
-                        className={s.auth_warning__close}><CloseIcon />
-                    </button>
-                    <div>Sign In to Add Items to Favourite!</div>
-                </div>
-            }
+            <SignInWarning 
+                state={isLikeClickedAndNotAuth}
+                setState={setIsLikeClickedAndNotAuth}
+                text = {'Add Items to Favourite!'}
+            />
             {isFetching ?
                 // MUST BE PRELOADER
                 <div>Loading...</div> :
@@ -79,7 +64,7 @@ const CategoryList = ({
                                 <Link to={'/item/'+el.id} className={s.item}>
                                     <div className={s.item__image}><img src={el.image} /></div>
                                     <div className={s.item__bottom}>
-                                        <div className={s.item__price}>{el.price}$</div>
+                                        <div className={s.item__price}>${el.price}</div>
                                         <div className={s.item__title}>{el.title}</div>
                                         {/* <div className={s.item__buttons}>
                                             <button>More</button>

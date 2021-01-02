@@ -70,10 +70,19 @@
 .favourite__close {
 
     position: absolute;
+    outline: none;
+    cursor: pointer;
     width: 15px;
     height: 15px;
     top: 25px;
     right: 25px;
+
+}
+
+.favourite__close:hover svg, .favourite__close:focus svg {
+
+    transform: scale(1.1);
+    stroke-width: 2;
 
 }
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Down } from '../../assets/Icons'
 import s from './Slider.module.css'
@@ -32,13 +32,17 @@ const SliderContainer = ({objects, className, period, afterClickPeriod}) => {
 
     let [intervalId, setIntervalId] = useState()
 
+    let periodRef = useRef();
+
+    periodRef.current = period
+
     useEffect(()=>{
 
         if(!isTouched){
             // debugger
             setIntervalId(setInterval(() => {
                 setNext()
-            }, period * 1000))
+            }, periodRef.current * 1000))
         }else{
             // debugger
             clearInterval(intervalId)

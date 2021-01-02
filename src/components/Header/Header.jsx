@@ -24,11 +24,11 @@ const Header = function({isAuth, logoutThunk, ...props}){
                             <button onClick={()=>{
                                 setLogin(1)
                                 document.body.style.overflow = 'hidden'
-                                }}>Войти</button>
+                                }}>Sign In</button>
                             :
                             <div>
-                                <Link to='/profile'>Мой Аккаунт</Link>
-                                <button onClick={logoutThunk}>Выйти</button>
+                                <Link to='/profile'>My Account</Link>
+                                <button onClick={logoutThunk}>Sign Out</button>
                             </div>
                             }
                         </div>

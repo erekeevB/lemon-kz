@@ -105,19 +105,6 @@ const setNullProfile = (dispatch) => {
 
 const setTempProfile = (dispatch, data) => {
 
-    // let role
-
-    // switch(data.roles[0].name){
-    //     case 'ROLE_ADMIN':
-    //         role = 'Admin'
-    //     case 'ROLE_USER':
-    //         role = 'User'
-    //     case 'ROLE_MANAGER':
-    //         role = 'Manager'
-    //     case 'ROLE_EMPLOYEE':
-    //         role = 'Employee'
-    // }
-
     let tempProfile = {
         id: data.id,
         name: data.name,
@@ -216,7 +203,7 @@ export const editProfileThunk = (profile) => (dispatch) => {
 }
 
 export const toggleFavouriteThunk = (favourite) => (dispatch) => {
-
+    debugger
     dispatch(toggleFavourite(favourite))
 
 }
