@@ -19,6 +19,7 @@ const Header = function({isAuth, logoutThunk, ...props}){
                     <Link to='/' className={s.header__header}>Lemon.kz</Link>
                     <div className={s.header__right}>
                         <button onClick={()=>setLangWindow(true)}><GlobeIcon /></button>
+                        <Link to='/cart'>My Cart</Link>
                         <div>
                             {!isAuth ? 
                             <button onClick={()=>{

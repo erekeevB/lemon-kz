@@ -70,12 +70,30 @@
 
 }
 
+.item__price__wrapper {
+
+    padding: 30px 0;
+    border-bottom: 2px solid lightgray;
+
+}
+
 .item__price {
 
     font-size: 2rem;
     font-weight: 700;
-    padding: 40px 0;
-    border-bottom: 2px solid lightgray;
+
+}
+
+.item__overall__price__wrapper {
+
+    margin-top: 10px;
+    font-size: 1.2rem;
+
+}
+
+.item__overall__price {
+
+    font-weight: 700;
 
 }
 

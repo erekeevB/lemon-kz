@@ -13,7 +13,7 @@ const ProfileFavourites = ({ favourites, isAuth, deleteFavouriteThunk, ...props 
             <div className={s.favourites}>
                 {favourites.map((el)=>{
                     return(
-                        <div className={s.favourite__wrapper}>
+                        <div key={el.id} className={s.favourite__wrapper}>
                             <button onClick={()=>{
                                 deleteFavouriteThunk(el.id)
                             }} className={s.favourite__close}><CloseIcon /></button>

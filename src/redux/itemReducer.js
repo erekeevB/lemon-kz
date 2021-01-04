@@ -8,7 +8,7 @@ let initialState = {
 
     item: {},
     error: '',
-    isFetching: false
+    isFetching: true
 
 }
 

@@ -12,7 +12,7 @@ const SignInWarning = ({state, setState, text}) => {
                         return false
                     }
                 })
-            }, 1000)
+            }, 3000)
         }
     }, [state])
 
