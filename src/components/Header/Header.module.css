@@ -37,3 +37,27 @@
     column-gap: 20px;
 
 }
+
+.header__cart {
+
+    color: black;
+    position: relative;
+
+}
+
+.header__cart__length {
+
+    position: absolute;
+    top: 0%;
+    right: 0%;
+    width: 22px;
+    height: 22px;
+    transform: translate(50%, -50%);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: white;
+    background-color: red;
+    padding-top: 2px;
+    border-radius: 50%;
+
+}

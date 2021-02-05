@@ -167,6 +167,7 @@
 
 .item__card, .item__favourite {
 
+    outline: none;
     font-size: 1rem;
     font-weight: 700;
     text-transform: uppercase;
@@ -180,6 +181,12 @@
     height: 50px;
     background: orange;
     padding-top: 3px;
+
+}
+
+.item__card.item__card_disabled {
+
+    background-color: lightgray;
 
 }
 

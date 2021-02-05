@@ -12,12 +12,13 @@ let initialState = {
 
     profile: {
         id: null,
+        token: null,
         name: null,
         surname: null,
         thirdname: null,
         email: null,
         phoneNumber: null,
-        role: null,
+        isStaff: null,
         img: null,
         sex: null
     },
@@ -33,6 +34,7 @@ const authReducer = (state = initialState, action) => {
     switch (action.type) {
 
         case SET_AUTH: {
+            debugger
             return {
                 ...state,
                 profile: {...action.profile},
@@ -89,35 +91,6 @@ const authReducer = (state = initialState, action) => {
 
 }
 
-const setNullProfile = (dispatch) => {
-
-    dispatch(setAuth(
-        {
-            username: '',
-            email: '',
-            phoneNumber: '',
-            role: ''
-        }, 
-        0
-    ));
-
-}
-
-const setTempProfile = (dispatch, data) => {
-
-    let tempProfile = {
-        id: data.id,
-        name: data.name,
-        surname: data.surname,
-        email: data.email,
-        phoneNumber: data.phoneNumber,
-        sex: data.sex,
-        role: data.role
-    };
-    dispatch(setAuth(tempProfile, 1));
-
-}
-
 export const setAuth = (profile, isAuth) => ({ type: SET_AUTH, profile, isAuth });
 
 export const editProfile = (profile) => ({ type: EDIT_PROFILE, profile });
@@ -134,17 +107,6 @@ export const toggleFavourite = (favourite) => ({ type: TOGGLE_FAVOURITE, favouri
 
 export const getSetAuthThunk = () => (dispatch) => {
 
-    dispatch(toggleFetch(true))
-
-    setTempProfile(dispatch, {
-        id: 1,
-        name: 'adsfa',
-        surname: 'asdasd',
-        email: 'afdad',
-        phoneNumber: '3453453',
-        role: 'Admin'
-    });
-
     getFavouritesAPI().then((data)=>{
         if(data){
             dispatch(setFavourites(data))
@@ -155,17 +117,6 @@ export const getSetAuthThunk = () => (dispatch) => {
 }
 
 export const loginUserThunk = (profile) => (dispatch) => {
-
-    dispatch(toggleFetch(true))
-
-    setTempProfile(dispatch, {
-        id: 1,
-        name: 'adsfa',
-        surname: 'asdads',
-        email: profile.email,
-        phoneNumber: '3453453',
-        role: 'Manager'
-    });
 
     getFavouritesAPI().then((data)=>{
         debugger
@@ -179,38 +130,21 @@ export const loginUserThunk = (profile) => (dispatch) => {
 
 export const registerUserThunk = (profile) => (dispatch) => {
 
-    setTempProfile(dispatch, {
-        ...profile, 
-        id: 1, 
-        phoneNumber: '3453453',
-        role: 'Manager'
-    })
-
 }
 
 export const logoutThunk = () => (dispatch) => {
-
-    setNullProfile(dispatch);
-
-    dispatch(setFavourites([]))
 
 }
 
 export const editProfileThunk = (profile) => (dispatch) => {
 
-    dispatch(editProfile(profile)); 
-
 }
 
 export const toggleFavouriteThunk = (favourite) => (dispatch) => {
-    debugger
-    dispatch(toggleFavourite(favourite))
 
 }
 
 export const deleteFavouriteThunk = (favourite) => (dispatch) => {
-
-    dispatch(deleteFavourite(favourite))
 
 }
 

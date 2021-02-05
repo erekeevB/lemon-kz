@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import { HeartIcon, HeartIconFilled } from '../../assets/Icons';
@@ -23,7 +23,7 @@ const CategoryList = ({
 
     let a = useHistory()
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         getSetCategoryResultThunk(isAll, param)
     }, [param, isAll])
 

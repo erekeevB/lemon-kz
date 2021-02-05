@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { HeartIcon, HeartIconFilled, MinusIcon, PlusIcon } from '../../assets/Icons';
@@ -9,7 +9,7 @@ import SignInWarning from '../SignInWarning/SignInWarning';
 import s from './ItemPage.module.css'
 
 const ItemPage = ({ 
-    id, item, isFetching, favourites, isAuth, 
+    id, item, isFetching, favourites, isAuth, cart,
     getSetItemThunk, toggleFavouriteThunk, addCardItemThunk }) => {
 
     const [isLikeClickedAndNotAuth, setIsLikeClickedAndNotAuth] = useState(false)
@@ -30,7 +30,7 @@ const ItemPage = ({
 
     }
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         getSetItemThunk(id)
         setQuantity(1)
     }, [id])
@@ -87,12 +87,20 @@ const ItemPage = ({
                                     </div>
                                 </div>
                                 <div className={s.item__buttons}>
+                                {cart.some(el=>el.id===item.id) ? 
+                                    <button 
+                                        className={s.item__card + ' ' + s.item__card_disabled} 
+                                        disabled
+                                    >
+                                        Item Already in Cart
+                                    </button>:
                                     <button 
                                         className={s.item__card} 
                                         onClick={handleAddCartItem}
                                     >
                                         Add To Card
-                                    </button>
+                                    </button>    }
+                                    
                                     <button onClick={() => handleFavouriteButton(item)} className={s.item__favourite}>
                                         {!favourites.some((el) => el.id === item.id) || !isAuth ?
                                             <><HeartIcon />Add To Favourite</> :
@@ -117,7 +125,8 @@ let mStP = (state) => ({
     isFetching: state.item.isFetching,
     item: state.item.item,
     favourites: state.auth.favourites,
-    isAuth: state.auth.isAuth
+    isAuth: state.auth.isAuth,
+    cart: state.cart.cart
 })
 
 

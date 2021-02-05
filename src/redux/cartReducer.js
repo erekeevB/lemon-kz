@@ -96,7 +96,7 @@ export const deleteCardItemThunk = (id) => (dispatch) => {
 }
 
 export const changeAmountThunk = (id, isIncrease) => (dispatch) => {
-
+    
     if(isIncrease){
         dispatch(increaseAmount(id))
     }else{

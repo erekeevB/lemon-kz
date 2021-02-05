@@ -11,15 +11,15 @@ const Profile = ({ profile, isAuth, editProfileThunk, ...props }) => {
     return (
         <>
             {!isAuth && <Redirect to='/' />}
-            <h2 className={s.profile__header}>Мои Данные</h2>
+            <h2 className={s.profile__header}>My Account</h2>
             <div className={s.profile__info}>
                 <div className={s.profile__photo}><img src={ProfilePhoto} alt="Profile" /></div>
                 <div>
                     <div className={s.profile__name}>{profile.name} {profile.surname} {profile.thirdname && profile.thirdname}</div>
-                    <div>Email: {profile.email}</div>
-                    {profile.role !== 'user' &&
+                    <div>Username: {profile.username}</div>
+                    {profile.isStaff &&
                         <div>
-                            Роль: {profile.role}
+                            Role: Admin
                         </div>
                     }
                 </div>
@@ -28,7 +28,6 @@ const Profile = ({ profile, isAuth, editProfileThunk, ...props }) => {
                 initialValues={{
                     name: profile.name,
                     surname: profile.surname,
-                    thirdname: profile.thirdname,
                     phoneNumber: profile.phoneNumber,
                     sex: profile.sex
                 }}
@@ -39,9 +38,6 @@ const Profile = ({ profile, isAuth, editProfileThunk, ...props }) => {
                     }
                     if (!values.surname) {
                         errors.surname = 'Required';
-                    }
-                    if (!values.thirdname) {
-                        errors.thirdname = 'Required';
                     }
                     if (!values.name) {
                         errors.name = 'Required';
@@ -69,10 +65,6 @@ const Profile = ({ profile, isAuth, editProfileThunk, ...props }) => {
                             <div className={s.profile__nameForm__header} >
                                 <p>Фамилия</p>
                                 <Field name='surname' type='text' placeholder='Фамилия' component={InputComponent} />
-                            </div>
-                            <div className={s.profile__nameForm__header} >
-                                <p>Отчество</p>
-                                <Field name='thirdname' type='text' placeholder='Отчество' component={InputComponent} />
                             </div>
                         </div>
                         <div className={s.profile__radioWrapper__parent}>

@@ -45,6 +45,12 @@
 
 }
 
+.profile__nameForm__header {
+
+    width: 100%;
+
+}
+
 .profile__nameForm__header p {
 
     font-weight: 700;

@@ -1,0 +1,149 @@
+.cartPage {
+
+    width: 1000px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    grid-template-columns: 1fr auto;
+    column-gap: 20px;
+    align-items: start;
+    margin-bottom: 60px;
+
+}
+
+.cartPage__header {
+
+    grid-column: 1 / 3;
+    margin-top: 40px;
+    margin-bottom: 20px;
+
+}
+
+.carts {
+
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+    justify-content: center;
+
+}
+
+.cart {
+
+    width: 100%;
+    display: grid;
+    grid-template-columns: auto 1fr 100px 100px;
+    align-items: center;
+    justify-items: center;
+    border: 2px solid black;
+
+}
+
+.cart__image {
+
+    width: 100px;
+    height: 100px;
+    padding: 10px;
+    margin: 0 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.cart__image img {
+
+    max-width: 90%;
+    max-height: 90%;
+
+}
+
+.cart__title {
+
+    justify-self: start;
+    text-align: start;
+    color: black;
+
+}
+
+.cart__buttons {
+
+    display: flex;
+    justify-content: center;
+    column-gap: 10px;
+    height: fit-content;
+    width: fit-content;
+
+}
+
+.cart__amount {
+
+    width: 20px;
+    text-align: center;
+
+}
+
+.checkout__button, .empty__button {
+
+    width: 200px;
+    height: 50px;
+    font-weight: 700;
+    font-size: 1rem;
+    text-transform: uppercase;
+    background: orange;
+
+}
+
+.empty__button {
+
+    display: flex;
+    margin: 0 auto;
+    align-items: center;
+    justify-content: center;
+    color: black;
+
+}
+
+.cart__button {
+
+    width: 25px;
+    height: 25px;
+    background: black;
+    color: white;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.cart__button svg {
+
+    width: 40%;
+    height: 40%;
+    stroke-width: 1.5;
+
+}
+
+.checkout {
+
+    width: 250px;
+    height: 350px;
+    background: lightgray;
+    padding: 20px;
+
+}
+
+.checkout__price {
+
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 10px 0;
+
+}
+
+.empty {
+
+    grid-column: 1 / 3;
+
+}

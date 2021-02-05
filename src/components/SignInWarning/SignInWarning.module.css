@@ -8,6 +8,7 @@
     height: fit-content;
     background: red;
     color: white;
+    z-index: 10;
 
 }
 
