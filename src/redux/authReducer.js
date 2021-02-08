@@ -12,14 +12,12 @@ let initialState = {
 
     profile: {
         id: null,
-        token: null,
-        name: null,
-        surname: null,
-        thirdname: null,
+        username: null,
+        lastName: null,
+        firstName: null,
         email: null,
         phoneNumber: null,
         isStaff: null,
-        img: null,
         sex: null
     },
     favourites: [],
@@ -34,7 +32,6 @@ const authReducer = (state = initialState, action) => {
     switch (action.type) {
 
         case SET_AUTH: {
-            debugger
             return {
                 ...state,
                 profile: {...action.profile},

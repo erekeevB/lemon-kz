@@ -29,7 +29,7 @@
 
     display: grid;
     grid-template-columns: 600px 1fr;
-    column-gap: 60px;
+    column-gap: 40px;
     justify-content: space-between;
     justify-items: center;
     margin-top: 20px;
@@ -39,14 +39,14 @@
 .item__title {
 
     font-size: 2rem;
-    margin-bottom: 20px;
-
+    margin: 20px 0;
+    text-align: start;
 }
 
 .item__image {
 
-    width: 400px;
-    height: 400px;
+    width: 90%;
+    justify-self: start;
     display: flex;
     justify-content: center;
     align-items: center;

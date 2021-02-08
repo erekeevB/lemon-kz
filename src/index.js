@@ -6,10 +6,25 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './redux/redux-store';
-import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
+import { ApolloProvider, ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
+
+const httpLink = createHttpLink({
+    uri: 'http://localhost:8000/lemon/graphql',
+  });
+
+const authLink = setContext((_, { headers }) => {
+    const token = localStorage.getItem('token');
+    return {
+      headers: {
+        ...headers,
+        authorization: token ? `JWT ${token}` : "",
+      }
+    }
+  });
 
 const client = new ApolloClient({
-    uri: 'http://localhost:8000/lemon/graphql',
+    link: authLink.concat(httpLink),
     cache: new InMemoryCache()
   });
 

@@ -4,13 +4,13 @@ import { CloseIcon } from '../../assets/Icons';
 import s from './Authentication.module.css';
 import InputComponent from '../InputComponent/InputComponent';
 import { useMutation } from '@apollo/client';
-import { REGISTER } from '../../gqlAPI/auth';
+import { REGISTER } from '../../GRAPHQL/auth';
 
 const Registration = ({closeAuth, login}) => {
 
     let [error, setError] = useState()
 
-    const [register, {loading}] = useMutation(REGISTER, {
+    const [register] = useMutation(REGISTER, {
         onError: errors=>{
             setError(errors.message)
         },

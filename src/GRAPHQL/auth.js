@@ -1,17 +1,24 @@
 import { gql } from "@apollo/client";
 
+const user = `
+    user{
+        id
+        email
+        isStaff
+        username
+        firstName
+        lastName
+        sex
+        phoneNumber
+        cartQty
+    }
+`
+
 export const LOGIN = gql`
     mutation($username: String!, $password: String!){
         tokenAuth(username: $username, password:$password){
             token
-            user{
-                id
-                email
-                isStaff
-                username
-                firstName
-                lastName
-            }
+            ${user}
         }
     }
 `
@@ -27,13 +34,15 @@ export const REGISTER = gql`
 
 export const GET_ME = gql`
     query{
-        user{
-                id
-                email
-                isStaff
-                username
-                firstName
-                lastName
-            }
+        ${user}
+    }
+`
+
+export const UPDATE_USER = gql`
+    mutation($username: String, $firstName: String, $lastName: String, $email: String ){
+        updateUser(username: $username, firstName: $firstName, lastName: $lastName, email: $email){
+            ${user}
+            error
+        }
     }
 `

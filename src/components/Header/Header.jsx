@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { logoutThunk } from '../../redux/authReducer'
 
-const Header = function({isAuth, logoutThunk, cartLength, ...props}){
+const Header = function({isAuth, logoutThunk, cartQty, cartLength}){
     let [isLogin, setLogin] = useState(0)
     let [isLangWindow, setLangWindow] = useState(0)
 
@@ -20,7 +20,7 @@ const Header = function({isAuth, logoutThunk, cartLength, ...props}){
                         <button onClick={()=>setLangWindow(true)}><GlobeIcon /></button>
                         <Link className={s.header__cart} to='/cart'>
                             <CartIcon />
-                            {cartLength ? <div className={s.header__cart__length}>{cartLength}</div> : null}
+                            {cartQty ? <div className={s.header__cart__length}>{cartQty}</div> : null}
                         </Link>
                         <div>
                             {!isAuth ? 
@@ -46,6 +46,7 @@ const Header = function({isAuth, logoutThunk, cartLength, ...props}){
 const mStP = (state) => ({
 
     isAuth: state.auth.isAuth,
+    cartQty: state.auth.profile.cartQty,
     cartLength: state.cart.cart.length
 
 })

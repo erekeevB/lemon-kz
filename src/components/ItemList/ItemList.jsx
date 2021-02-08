@@ -1,35 +1,43 @@
-import React, { useLayoutEffect, useState } from 'react';
+import { useQuery } from '@apollo/client';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { HeartIcon, HeartIconFilled } from '../../assets/Icons';
+import { GET_ITEMS } from '../../GRAPHQL/items';
 import { toggleFavouriteThunk } from '../../redux/authReducer';
 import { getSetCategoryResultThunk } from '../../redux/categoryReducer';
 import SignInWarning from '../SignInWarning/SignInWarning';
-import s from './CategoryList.module.css'
+import queryString from 'query-string';
+import s from './ItemList.module.css';
 
-const CategoryList = ({ 
-    param, 
-    isAll, 
-    error, 
-    result, 
-    isFetching, 
-    favourites,
-    isAuth,
-    getSetCategoryResultThunk, 
-    toggleFavouriteThunk 
-}) => {
+const CategoryList = ({isAuth}) => {
+
+    let location = useLocation()
+
+    let [query, setQuery] = useState(queryString.parse(location.search))
+
+    useEffect(()=>{
+        setQuery(queryString.parse(location.search))
+        debugger
+    }, [location])
+
+    let {data, loading} = useQuery(GET_ITEMS, {
+        variables: {...query},
+        onCompleted: data=>{
+            debugger
+            console.log(data)
+        },
+        onError: err=>{
+            debugger
+            console.log(err.message)
+        }
+    })
 
     const [isLikeClickedAndNotAuth, setIsLikeClickedAndNotAuth] = useState(false)
 
-    let a = useHistory()
-
-    useLayoutEffect(() => {
-        getSetCategoryResultThunk(isAll, param)
-    }, [param, isAll])
-
-    const handleFavouriteButton = (el) => {
+    const handleFavouriteButton = (id) => {
         if(isAuth){
-            toggleFavouriteThunk(el)
+            
         }else{
             setIsLikeClickedAndNotAuth(true)
         }
@@ -42,30 +50,33 @@ const CategoryList = ({
                 setState={setIsLikeClickedAndNotAuth}
                 text = {'Add Items to Favourite!'}
             />
-            {isFetching ?
+            {loading ?
                 // MUST BE PRELOADER
                 <div>Loading...</div> :
                 <div className={s.items}>
-                    {result.map((el) => {
+                    {data && data.itemList.items.map((el) => {
+                        debugger
                         return (
                             <div key={el.id} className={s.item__wrapper}>
                                 <div className={s.item__favourite}>
                                     <button onClick={() => {
-                                        handleFavouriteButton(el)
+                                        handleFavouriteButton(el.id)
                                     }}>
                                         {
-                                            favourites.some(item=>item.id===el.id) ? 
+                                            el.isFavourite ? 
                                             <HeartIconFilled /> :
                                             <HeartIcon />
                                         }
                                     </button>
                                 </div>
-                                <button className={s.item__openHere}>Open Here</button>
+                                {/* <button className={s.item__openHere}>Open Here</button> */}
                                 <Link to={'/item/'+el.id} className={s.item}>
-                                    <div className={s.item__image}><img src={el.image} /></div>
+                                    <div className={s.item__image}>
+                                        <img src={el.thumbnail} alt={el.brand.name+' '+el.name} />
+                                    </div>
                                     <div className={s.item__bottom}>
                                         <div className={s.item__price}>${el.price}</div>
-                                        <div className={s.item__title}>{el.title}</div>
+                                        <div className={s.item__title}>{el.brand.name} {el.name}</div>
                                         {/* <div className={s.item__buttons}>
                                             <button>More</button>
                                             <button>Add to Card</button>

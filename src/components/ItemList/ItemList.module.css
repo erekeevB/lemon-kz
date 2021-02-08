@@ -91,9 +91,8 @@
 
 .item__image {
 
-    height: 150px;
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 
 }
 
@@ -188,11 +187,11 @@
 
 }
 
-.item__wrapper:hover.item__wrapper::before{
+/* .item__wrapper:hover::before{
 
     opacity: 1;
 
-}
+} */
 
 .item__wrapper:hover>.item__openHere {
 

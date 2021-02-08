@@ -37,14 +37,14 @@ const Main = () => {
             <SliderContainer period={1} afterClickPeriod={3} objects={temp} />
 
             <div className={s.sexSelect}>
-                <Link to='/category/women' className={s.sexSelect__elem}>
-                    <div>Женский</div>
+                <Link to='/items?sex=w' className={s.sexSelect__elem}>
+                    <div>Women</div>
                 </Link>
-                <Link to='/category/men' className={s.sexSelect__elem}>
-                    <div>Мужской</div>
+                <Link to='/items?sex=m' className={s.sexSelect__elem}>
+                    <div>Men</div>
                 </Link>
-                <Link to='/category/electronics' className={s.sexSelect__elem}>
-                    <div>Электроника</div>
+                <Link to='/items?category=Sneakers' className={s.sexSelect__elem}>
+                    <div>Sneakers</div>
                 </Link>
             </div>
         </div>

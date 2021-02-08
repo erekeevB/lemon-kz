@@ -4,14 +4,14 @@ import Registration from './Registration';
 import { registerUserThunk, setError, setAuth } from '../../redux/authReducer';
 import s from './Authentication.module.css'
 import { connect } from 'react-redux';
-import { gql, useMutation } from '@apollo/client';
-import { LOGIN } from '../../gqlAPI/auth';
+import { useMutation } from '@apollo/client';
+import { LOGIN } from '../../GRAPHQL/auth';
 
 
 
 const Authorization = ({ setLogin, isLogin, setAuth, isAuth, ...props }) => {
 
-    const [login, { loading, data, error }] = useMutation(LOGIN, {
+    const [login, { loading, error }] = useMutation(LOGIN, {
         onCompleted: data=>{
             debugger
             if(data?.tokenAuth){
@@ -54,7 +54,6 @@ const Authorization = ({ setLogin, isLogin, setAuth, isAuth, ...props }) => {
 
                 <Login
                     closeAuth={closeAuth}
-                    error={props.error}
                     setAuth={setAuth}
                     login = {login}
                     loading = {loading}

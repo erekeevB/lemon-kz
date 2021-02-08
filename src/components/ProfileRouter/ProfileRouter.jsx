@@ -12,8 +12,8 @@ const ProfileRouter = ({isAuth, ...props}) => {
         <div className={s.profile__wrapper}>
             <nav className={s.profile__nav}>
                 <div>
-                    <NavLink activeClassName={s.profile__nav__active} exact to='/profile'>Мои данные</NavLink>
-                    <NavLink activeClassName={s.profile__nav__active} to='/profile/favorites'>Избранные</NavLink>
+                    <NavLink activeClassName={s.profile__nav__active} exact to='/profile'>Profile</NavLink>
+                    <NavLink activeClassName={s.profile__nav__active} to='/profile/favorites'>Favourites</NavLink>
                 </div>
             </nav>
             <div className={s.profile__container}>

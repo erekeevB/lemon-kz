@@ -1,7 +1,9 @@
-import React, { useLayoutEffect, useState } from 'react';
+import { useQuery } from '@apollo/client';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { HeartIcon, HeartIconFilled, MinusIcon, PlusIcon } from '../../assets/Icons';
+import { GET_SINGLE_ITEM } from '../../GRAPHQL/items';
 import { toggleFavouriteThunk } from '../../redux/authReducer';
 import { addCardItemThunk } from '../../redux/cartReducer';
 import { getSetItemThunk } from '../../redux/itemReducer';
@@ -9,8 +11,19 @@ import SignInWarning from '../SignInWarning/SignInWarning';
 import s from './ItemPage.module.css'
 
 const ItemPage = ({ 
-    id, item, isFetching, favourites, isAuth, cart,
-    getSetItemThunk, toggleFavouriteThunk, addCardItemThunk }) => {
+    id, item, isAuth, toggleFavouriteThunk, addCardItemThunk }) => {
+
+    let {data, loading} = useQuery(GET_SINGLE_ITEM, {
+        variables: {id: id},
+        onCompleted: data => {
+            debugger
+            console.log(data)
+        },
+        onError: err => {
+            debugger
+            console.log(err.message)
+        }
+    })
 
     const [isLikeClickedAndNotAuth, setIsLikeClickedAndNotAuth] = useState(false)
 
@@ -30,14 +43,9 @@ const ItemPage = ({
 
     }
 
-    useLayoutEffect(() => {
-        getSetItemThunk(id)
-        setQuantity(1)
-    }, [id])
-
     return (
         <>
-            {isFetching ? <div>Loading...</div> :
+            {loading ? <div>Loading...</div> :
                 <>
                     <SignInWarning
                         state={isLikeClickedAndNotAuth}
@@ -46,23 +54,32 @@ const ItemPage = ({
                     />
                     <div className={s.item__wrapper}>
                         <div className={s.item__category}>
-                            <Link to={'/category/' + item.category}>{item.category}</Link> / {id}
+                            <Link to={'/items?category=' + data.singleItem.category.name}>
+                                {data.singleItem.category.name}
+                            </Link> / {id}
                         </div>
-
+                        <div className={s.item__header}>
+                            <h2 className={s.item__title}>{data.singleItem.brand.name} {data.singleItem.name}</h2>
+                        </div>
                         <div className={s.item}>
                             <div>
-                                <h2 className={s.item__title}>{item.title}</h2>
                                 <div className={s.item__image}>
-                                    <img src={item.image} />
+                                    {data.singleItem.thumbnail ?
+                                    <img 
+                                        src={data.singleItem.thumbnail} 
+                                        alt={data.singleItem.brand.name+' '+data.singleItem.name}/>
+                                    :
+                                    <div>No photo available</div>
+                                    }
                                 </div>
                             </div>
                             <div className={s.item__right}>
                                 <div className={s.item__price__wrapper}>
-                                    <div className={s.item__price}>${item.price.toFixed(2)}</div>
+                                    <div className={s.item__price}>${data.singleItem.price.toFixed(2)}</div>
                                     <div className={s.item__overall__price__wrapper}>
                                         Overall Price:
                                         <div className={s.item__overall__price}>
-                                            ${(item.price * quantity).toFixed(2)}
+                                            ${(data.singleItem.price * quantity).toFixed(2)}
                                         </div>
                                     </div>
                                 </div>
@@ -87,7 +104,7 @@ const ItemPage = ({
                                     </div>
                                 </div>
                                 <div className={s.item__buttons}>
-                                {cart.some(el=>el.id===item.id) ? 
+                                {data.singleItem.qty>0 ? 
                                     <button 
                                         className={s.item__card + ' ' + s.item__card_disabled} 
                                         disabled
@@ -102,7 +119,7 @@ const ItemPage = ({
                                     </button>    }
                                     
                                     <button onClick={() => handleFavouriteButton(item)} className={s.item__favourite}>
-                                        {!favourites.some((el) => el.id === item.id) || !isAuth ?
+                                        {!data.singleItem.isFavourite || !isAuth ?
                                             <><HeartIcon />Add To Favourite</> :
                                             <><HeartIconFilled />Remove From Favourites</>}
                                     </button>
@@ -111,8 +128,9 @@ const ItemPage = ({
                         </div>
                         <div className={s.item__desc}>
                             <p>Description</p>
-                            {item.description}
+                            {data.singleItem.description}
                         </div>
+                        {data.singleItem.review}
                     </div>
                 </>
             }

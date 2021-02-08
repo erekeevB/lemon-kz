@@ -5,9 +5,26 @@ import s from './Profile.module.css'
 import ProfilePhoto from './../../../assets/profilePhoto.png'
 import { Field, Form, Formik } from 'formik'
 import InputComponent from '../../InputComponent/InputComponent';
-import { editProfileThunk } from '../../../redux/authReducer'
+import { editProfileThunk, setAuth } from '../../../redux/authReducer'
+import { useMutation } from '@apollo/client'
+import { UPDATE_USER } from '../../../GRAPHQL/auth'
 
-const Profile = ({ profile, isAuth, editProfileThunk, ...props }) => {
+const Profile = ({ profile, isAuth, editProfileThunk, setAuth, ...props }) => {
+
+    const [updateUser] = useMutation(UPDATE_USER, {
+        onCompleted: data=>{
+            debugger
+            if(data?.updateUser.user){
+
+                setAuth(data.updateUser.user, 1)
+            }
+        },
+        onError: err=>{
+            debugger
+            console.log(err.message)
+        }
+    })
+
     return (
         <>
             {!isAuth && <Redirect to='/' />}
@@ -15,7 +32,7 @@ const Profile = ({ profile, isAuth, editProfileThunk, ...props }) => {
             <div className={s.profile__info}>
                 <div className={s.profile__photo}><img src={ProfilePhoto} alt="Profile" /></div>
                 <div>
-                    <div className={s.profile__name}>{profile.name} {profile.surname} {profile.thirdname && profile.thirdname}</div>
+                    <div className={s.profile__name}>{profile.firstName} {profile.lastName}</div>
                     <div>Username: {profile.username}</div>
                     {profile.isStaff &&
                         <div>
@@ -26,31 +43,28 @@ const Profile = ({ profile, isAuth, editProfileThunk, ...props }) => {
             </div>
             <Formik
                 initialValues={{
-                    name: profile.name,
-                    surname: profile.surname,
+                    firstName: profile.firstName,
+                    lastName: profile.lastName,
                     phoneNumber: profile.phoneNumber,
                     sex: profile.sex
                 }}
                 validate={values => {
                     const errors = {};
-                    if (!values.name) {
-                        errors.name = 'Required';
+                    if (!values.firstName) {
+                        errors.firstName = 'Required';
                     }
-                    if (!values.surname) {
-                        errors.surname = 'Required';
+                    if (!values.lastName) {
+                        errors.lastName = 'Required';
                     }
-                    if (!values.name) {
-                        errors.name = 'Required';
-                    }
-                    if (!values.sex) {
-                        errors.sex = 'Required';
-                    }
+                    // if (!values.sex) {
+                    //     errors.sex = 'Required';
+                    // }
                     return errors;
                 }}
                 onSubmit={(values, { setSubmitting }) => {
                     debugger
                     setSubmitting(true);
-                    editProfileThunk(values);
+                    updateUser({variables: {...values}})
                     setSubmitting(false);
                 }}
 
@@ -59,12 +73,22 @@ const Profile = ({ profile, isAuth, editProfileThunk, ...props }) => {
                     <Form className={s.profile__form}>
                         <div className={s.profile__nameForm}>
                             <div className={s.profile__nameForm__header} >
-                                <p>Имя</p>
-                                <Field name='name' type='text' placeholder='Имя' component={InputComponent} />
+                                <p>First Name</p>
+                                <Field 
+                                    name='firstName' 
+                                    type='text' 
+                                    placeholder='First Name' 
+                                    component={InputComponent} 
+                                />
                             </div>
                             <div className={s.profile__nameForm__header} >
-                                <p>Фамилия</p>
-                                <Field name='surname' type='text' placeholder='Фамилия' component={InputComponent} />
+                                <p>Last Name</p>
+                                <Field 
+                                    name='lastName' 
+                                    type='text' 
+                                    placeholder='Last Name'
+                                    component={InputComponent} 
+                                />
                             </div>
                         </div>
                         <div className={s.profile__radioWrapper__parent}>
@@ -86,7 +110,7 @@ const Profile = ({ profile, isAuth, editProfileThunk, ...props }) => {
                                     className={s.profile__radioLabel + ' ' + s.profile__radioLabel_first} 
                                     htmlFor='m'
                                 >
-                                    Мужской
+                                    Man
                                 </label>
                                 <Field
                                     id='j'
@@ -97,12 +121,12 @@ const Profile = ({ profile, isAuth, editProfileThunk, ...props }) => {
                                     checked={values.sex === 'j'}
                                 />
                                 <label className={s.profile__radioLabel} htmlFor='j'>
-                                    Женский
+                                    Woman
                                 </label>
                             </div>
                         </div>
                         <div className={s.profile__button}>
-                            <button className={s.profile__buttonButton} type="submit">Сохранить</button>
+                            <button className={s.profile__buttonButton} type="submit">Save</button>
                             <span className={s.profile__buttonFiller}></span>
                         </div>
 
@@ -120,4 +144,5 @@ const mStP = (state) => ({
     profile: state.auth.profile
 
 })
-export default connect(mStP, { editProfileThunk })(Profile)
+
+export default connect(mStP, { editProfileThunk, setAuth })(Profile)

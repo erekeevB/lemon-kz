@@ -1,5 +1,5 @@
 import { Field, Form, Formik } from 'formik';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { CloseIcon } from '../../assets/Icons';
 import s from './Authentication.module.css';
 import InputComponent from '../InputComponent/InputComponent';

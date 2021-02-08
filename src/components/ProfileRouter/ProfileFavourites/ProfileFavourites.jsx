@@ -9,9 +9,9 @@ const ProfileFavourites = ({ favourites, isAuth, deleteFavouriteThunk, ...props 
     return (
         <>
             {!isAuth && <Redirect to='/' />}
-            <h2 className={s.profile__header}>Мои Избранные</h2>
+            <h2 className={s.profile__header}>My Favourites</h2>
             <div className={s.favourites}>
-                {favourites.map((el)=>{
+                {favourites ? favourites.map((el)=>{
                     return(
                         <div key={el.id} className={s.favourite__wrapper}>
                             <button onClick={()=>{
@@ -26,7 +26,8 @@ const ProfileFavourites = ({ favourites, isAuth, deleteFavouriteThunk, ...props 
                             </Link>
                         </div>
                     )
-                })}
+                }):
+                <div>Empty :(</div>}
             </div>
         </>
     )
