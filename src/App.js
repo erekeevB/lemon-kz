@@ -18,10 +18,6 @@ function App({setAuth}) {
                 setAuth(data.user, 1)
                 setIsInitialized(true)
             }
-        },
-        onError: err=>{
-            debugger
-            console.log(err.message)
         }
     })
 

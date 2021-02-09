@@ -51,3 +51,11 @@ export const GET_SINGLE_ITEM = gql`
         }
     }
 `
+
+export const TOGGLE_FAV = gql`
+    mutation($id: ID!){
+        toggleFav(id: $id){
+            success
+        }
+    }
+`

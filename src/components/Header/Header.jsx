@@ -4,9 +4,8 @@ import s from './Header.module.css'
 import Authentication from '../Authorization/Authentication'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { logoutThunk } from '../../redux/authReducer'
 
-const Header = function({isAuth, logoutThunk, cartQty, cartLength}){
+const Header = function({isAuth, logoutThunk, cartQty}){
     let [isLogin, setLogin] = useState(0)
     let [isLangWindow, setLangWindow] = useState(0)
 
@@ -46,9 +45,8 @@ const Header = function({isAuth, logoutThunk, cartQty, cartLength}){
 const mStP = (state) => ({
 
     isAuth: state.auth.isAuth,
-    cartQty: state.auth.profile.cartQty,
-    cartLength: state.cart.cart.length
+    cartQty: state.auth.profile.cartQty
 
 })
 
-export default connect(mStP, {logoutThunk})(Header)
+export default connect(mStP, {})(Header)

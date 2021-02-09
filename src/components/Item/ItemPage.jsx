@@ -1,19 +1,17 @@
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { HeartIcon, HeartIconFilled, MinusIcon, PlusIcon } from '../../assets/Icons';
-import { GET_SINGLE_ITEM } from '../../GRAPHQL/items';
-import { toggleFavouriteThunk } from '../../redux/authReducer';
-import { addCardItemThunk } from '../../redux/cartReducer';
-import { getSetItemThunk } from '../../redux/itemReducer';
+import { ADD_TO_CART, GET_CART_ITEMS } from '../../GRAPHQL/cart';
+import { GET_SINGLE_ITEM, TOGGLE_FAV } from '../../GRAPHQL/items';
+import { setQty } from '../../redux/authReducer';
 import SignInWarning from '../SignInWarning/SignInWarning';
 import s from './ItemPage.module.css'
 
-const ItemPage = ({ 
-    id, item, isAuth, toggleFavouriteThunk, addCardItemThunk }) => {
+const ItemPage = ({ id, isAuth, setQty }) => {
 
-    let {data, loading} = useQuery(GET_SINGLE_ITEM, {
+    const {data, loading, refetch} = useQuery(GET_SINGLE_ITEM, {
         variables: {id: id},
         onCompleted: data => {
             debugger
@@ -25,22 +23,45 @@ const ItemPage = ({
         }
     })
 
+    const [toggleFavourite] = useMutation(TOGGLE_FAV, {
+        variables: {id},
+        onCompleted: data=>{
+            if(data?.toggleFav.success){
+                refetch()
+            }
+        }
+    })
+
+    const [addToCart, {loading: buttonIsFetching}] = useMutation(ADD_TO_CART, {
+        onCompleted: data=>{
+            if(!data?.mutateCart.error){
+                setQty(data.mutateCart.cartQty)
+                refetch()
+            }
+            
+        },
+        refetchQueries: GET_CART_ITEMS,
+        awaitRefetchQueries: true
+    })
+
     const [isLikeClickedAndNotAuth, setIsLikeClickedAndNotAuth] = useState(false)
 
     const [quantity, setQuantity] = useState(1)
 
-    const handleFavouriteButton = (el) => {
+    const handleFavouriteButton = () => {
         if (isAuth) {
-            toggleFavouriteThunk(el)
+            toggleFavourite()
         } else {
             setIsLikeClickedAndNotAuth(true)
         }
     }
 
-    const handleAddCartItem = () => {
-
-        addCardItemThunk(item, quantity)
-
+    const handleAddCartItem = (id, qty) => {
+        if (isAuth) {
+            addToCart({variables: {id, qty}})
+        } else {
+            setIsLikeClickedAndNotAuth(true)
+        }
     }
 
     return (
@@ -54,6 +75,7 @@ const ItemPage = ({
                     />
                     <div className={s.item__wrapper}>
                         <div className={s.item__category}>
+                            <Link to={'/items'}>Items</Link> / 
                             <Link to={'/items?category=' + data.singleItem.category.name}>
                                 {data.singleItem.category.name}
                             </Link> / {id}
@@ -113,12 +135,12 @@ const ItemPage = ({
                                     </button>:
                                     <button 
                                         className={s.item__card} 
-                                        onClick={handleAddCartItem}
+                                        onClick={()=>{handleAddCartItem(data.singleItem.id, quantity)}}
                                     >
                                         Add To Card
                                     </button>    }
                                     
-                                    <button onClick={() => handleFavouriteButton(item)} className={s.item__favourite}>
+                                    <button onClick={() => handleFavouriteButton()} className={s.item__favourite}>
                                         {!data.singleItem.isFavourite || !isAuth ?
                                             <><HeartIcon />Add To Favourite</> :
                                             <><HeartIconFilled />Remove From Favourites</>}
@@ -140,13 +162,7 @@ const ItemPage = ({
 }
 
 let mStP = (state) => ({
-    isFetching: state.item.isFetching,
-    item: state.item.item,
-    favourites: state.auth.favourites,
-    isAuth: state.auth.isAuth,
-    cart: state.cart.cart
+    isAuth: state.auth.isAuth
 })
 
-
-
-export default connect(mStP, { getSetItemThunk, toggleFavouriteThunk, addCardItemThunk })(ItemPage)
+export default connect(mStP, {setQty})(ItemPage)

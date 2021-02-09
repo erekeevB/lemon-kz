@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import Login from './Login';
 import Registration from './Registration';
-import { registerUserThunk, setError, setAuth } from '../../redux/authReducer';
+import { setAuth } from '../../redux/authReducer';
 import s from './Authentication.module.css'
 import { connect } from 'react-redux';
 import { useMutation } from '@apollo/client';
@@ -13,18 +13,11 @@ const Authorization = ({ setLogin, isLogin, setAuth, isAuth, ...props }) => {
 
     const [login, { loading, error }] = useMutation(LOGIN, {
         onCompleted: data=>{
-            debugger
             if(data?.tokenAuth){
                 localStorage.setItem("token", data.tokenAuth.token)
                 setAuth(data.tokenAuth.user, 1)
-                debugger
-                console.log(localStorage.getItem("token"))
                 closeAuth(0, 'unset')
             }
-        },
-        onError: error=>{
-            console.log(error.message)
-            debugger
         }
     })
 
@@ -32,16 +25,13 @@ const Authorization = ({ setLogin, isLogin, setAuth, isAuth, ...props }) => {
 
         document.body.style.overflow = string;
         setLogin(num);
-        props.setError('');
 
     }
 
     useEffect(() => {
 
         if (isAuth) {
-
             closeAuth(0, 'unset')
-
         }
 
     }, [isAuth])
@@ -84,4 +74,4 @@ const mStP = (state) => {
     }
 
 }
-export default connect(mStP, { setAuth, registerUserThunk, setError })(Authorization);
+export default connect(mStP, { setAuth })(Authorization);

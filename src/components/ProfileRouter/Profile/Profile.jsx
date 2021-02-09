@@ -13,15 +13,9 @@ const Profile = ({ profile, isAuth, editProfileThunk, setAuth, ...props }) => {
 
     const [updateUser] = useMutation(UPDATE_USER, {
         onCompleted: data=>{
-            debugger
             if(data?.updateUser.user){
-
                 setAuth(data.updateUser.user, 1)
             }
-        },
-        onError: err=>{
-            debugger
-            console.log(err.message)
         }
     })
 
@@ -145,4 +139,4 @@ const mStP = (state) => ({
 
 })
 
-export default connect(mStP, { editProfileThunk, setAuth })(Profile)
+export default connect(mStP, { setAuth })(Profile)

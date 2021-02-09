@@ -2,10 +2,9 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Link, Redirect } from 'react-router-dom'
 import s from './ProfileFavourites.module.css'
-import { deleteFavouriteThunk } from '../../../redux/authReducer'
 import { CloseIcon } from '../../../assets/Icons'
 
-const ProfileFavourites = ({ favourites, isAuth, deleteFavouriteThunk, ...props }) => {
+const ProfileFavourites = ({ favourites, isAuth, ...props }) => {
     return (
         <>
             {!isAuth && <Redirect to='/' />}
@@ -15,7 +14,7 @@ const ProfileFavourites = ({ favourites, isAuth, deleteFavouriteThunk, ...props 
                     return(
                         <div key={el.id} className={s.favourite__wrapper}>
                             <button onClick={()=>{
-                                deleteFavouriteThunk(el.id)
+                                
                             }} className={s.favourite__close}><CloseIcon /></button>
                             <Link to={'/item/'+el.id} className={s.favourite}>
                                 <div className={s.favourite__img}><img src={el.image} alt='favourites' /></div>
@@ -41,4 +40,4 @@ const mStP = (state) => ({
 
 })
 
-export default connect(mStP, { deleteFavouriteThunk })(ProfileFavourites)
+export default connect(mStP, {})(ProfileFavourites)

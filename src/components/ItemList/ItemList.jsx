@@ -1,11 +1,9 @@
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import { HeartIcon, HeartIconFilled } from '../../assets/Icons';
-import { GET_ITEMS } from '../../GRAPHQL/items';
-import { toggleFavouriteThunk } from '../../redux/authReducer';
-import { getSetCategoryResultThunk } from '../../redux/categoryReducer';
+import { GET_ITEMS, TOGGLE_FAV } from '../../GRAPHQL/items';
 import SignInWarning from '../SignInWarning/SignInWarning';
 import queryString from 'query-string';
 import s from './ItemList.module.css';
@@ -14,18 +12,18 @@ const CategoryList = ({isAuth}) => {
 
     let location = useLocation()
 
-    let [query, setQuery] = useState(queryString.parse(location.search))
+    const [query, setQuery] = useState(queryString.parse(location.search))
 
-    useEffect(()=>{
-        setQuery(queryString.parse(location.search))
-        debugger
-    }, [location])
+    const {data, loading, refetch} = useQuery(GET_ITEMS, {
+        variables: {...query}
+    })
 
-    let {data, loading} = useQuery(GET_ITEMS, {
-        variables: {...query},
+    const [toggleFavourite] = useMutation(TOGGLE_FAV, {
         onCompleted: data=>{
             debugger
-            console.log(data)
+            if(data?.toggleFav.success){
+                refetch()
+            }
         },
         onError: err=>{
             debugger
@@ -35,9 +33,15 @@ const CategoryList = ({isAuth}) => {
 
     const [isLikeClickedAndNotAuth, setIsLikeClickedAndNotAuth] = useState(false)
 
+    useEffect(()=>{
+        setQuery(queryString.parse(location.search))
+    }, [location.search])
+
+    
+
     const handleFavouriteButton = (id) => {
         if(isAuth){
-            
+            toggleFavourite({variables: {id}})
         }else{
             setIsLikeClickedAndNotAuth(true)
         }
@@ -55,7 +59,6 @@ const CategoryList = ({isAuth}) => {
                 <div>Loading...</div> :
                 <div className={s.items}>
                     {data && data.itemList.items.map((el) => {
-                        debugger
                         return (
                             <div key={el.id} className={s.item__wrapper}>
                                 <div className={s.item__favourite}>
@@ -94,13 +97,9 @@ const CategoryList = ({isAuth}) => {
 }
 
 const mStP = (state) => ({
-
-    error: state.category.error,
-    result: state.category.result,
-    isFetching: state.category.isFetching,
-    favourites: state.auth.favourites,
+    
     isAuth: state.auth.isAuth
 
 })
 
-export default connect(mStP, { getSetCategoryResultThunk, toggleFavouriteThunk })(CategoryList)
+export default connect(mStP, {})(CategoryList)
