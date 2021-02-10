@@ -16,8 +16,11 @@ function App({setAuth}) {
         onCompleted: data=>{
             if(data.user){
                 setAuth(data.user, 1)
-                setIsInitialized(true)
             }
+            setIsInitialized(true)
+        },
+        onError: err=>{
+            setIsInitialized(true)
         }
     })
 

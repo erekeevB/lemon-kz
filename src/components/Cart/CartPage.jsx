@@ -4,61 +4,43 @@ import { connect } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import { CloseIcon } from '../../assets/Icons';
 import { GET_CART_ITEMS, REMOVE_FROM_CART } from '../../GRAPHQL/cart';
+import { GET_SINGLE_ITEM } from '../../GRAPHQL/items';
 import { setQty } from '../../redux/authReducer';
 import s from './CartPage.module.css'
 
 const CartPage = ({ isAuth, setQty }) => {
 
-    const {refetch} = useQuery(GET_CART_ITEMS, {
-        onCompleted: data => {
-            debugger
-            setCart(() => {
-                if (!data?.user.cartItems) {
-                    return null
-                }
-                return data.user.cartItems.map(el => {
-                    return {
-                        ...el,
-                        brand: { ...el.brand }
-                    }
-                })
-            })
+    const {data, refetch} = useQuery(GET_CART_ITEMS, {
+        onCompleted: () => {
             setLoading(false)
         },
-        onError: err => {
-            debugger
-            console.log(err.message)
+        onError: () =>{
+            setLoading(false)
         }
     })
 
-    const [removeCartItem, { loading: isFetchingRemove }] = useMutation(REMOVE_FROM_CART, {
+    const [removeCartItem] = useMutation(REMOVE_FROM_CART, {
         onCompleted: data => {
-            debugger
-            setCart(() => {
-                if (!data?.mutateCart.cartItems) {
-                    return null
-                }
-                return data.mutateCart.cartItems.map(el => {
-                    return {
-                        ...el,
-                        brand: { ...el.brand }
-                    }
-                })
-            })
-            setQty(data.mutateCart.cartQty)
             refetch()
+            setQty(data.mutateCart.cartQty)
+            setIsRemoveFetching(-1)
+        },
+        onError: ()=>{
+            setIsRemoveFetching(-1)
         }
     })
 
     let [loading, setLoading] = useState(true)
 
-    let [cart, setCart] = useState(null)
+    let [isRemoveFetching, setIsRemoveFetching] = useState(-1)
 
     let history = useHistory()
 
     useEffect(() => {
-        if (!isAuth) {
-            history.goBack()
+        if(!isAuth){
+            history.push('/')
+        }else{
+            refetch()
         }
     }, [isAuth])
 
@@ -68,11 +50,11 @@ const CartPage = ({ isAuth, setQty }) => {
         <div className={s.cartPage__header}>
             <h2>My Cart</h2>
         </div>
-        {!loading ?
+        {!loading && isAuth?
         <>
-            {cart?.length ?
+            {data && data.user && data.user.cartItems.length ?
             <><div className={s.carts}>
-                {cart.map(el => {
+                {data.user.cartItems.map(el => {
                     return (
                         <div key={el.id} className={s.cart}>
                             <Link to={'/item/' + el.id}>
@@ -92,12 +74,30 @@ const CartPage = ({ isAuth, setQty }) => {
                                 </select>
                                 <button
                                     onClick={() => {
-                                        removeCartItem({ variables: { id: el.id } })
+                                        setIsRemoveFetching(el.id)
+                                        removeCartItem({ 
+                                            variables: { id: el.id },
+                                            update(cache, ){
+                                                let item = cache.readQuery({
+                                                    query: GET_SINGLE_ITEM, 
+                                                    variables: {id: el.id}
+                                                })
+                                                if(item){
+                                                    cache.writeQuery({
+                                                        query: GET_SINGLE_ITEM,
+                                                        variables: {id: el.id},
+                                                        data: {
+                                                            singleItem: {...item, qty: 0}
+                                                        }
+                                                    })
+                                                }
+                                            }
+                                        })
                                     }}
-                                    disabled={isFetchingRemove}
+                                    disabled={isRemoveFetching > 0}
                                     className={s.cart__delete}
                                 >
-                                    {!isFetchingRemove ?
+                                    {isRemoveFetching!==el.id ?
                                         <CloseIcon />
                                         :
                                         <span>...</span>
@@ -112,7 +112,7 @@ const CartPage = ({ isAuth, setQty }) => {
                 <div className={s.checkout__amount}>
                     <div>Total Price</div>
                     <div className={s.checkout__price}>
-                        ${cart.reduce((total, curr) => {
+                        ${data && data.user.cartItems.reduce((total, curr) => {
                         return total + (curr.qty * curr.price)
                     }, 0).toFixed(2)
                         }
@@ -122,7 +122,7 @@ const CartPage = ({ isAuth, setQty }) => {
             </div></> :
             <div className={s.empty}>
                 <div className={s.empty__text}>Cart is Empty :(</div>
-                <Link className={s.empty__button} to='/category/all' >Shop Now</Link>
+                <Link className={s.empty__button} to='/items' >Shop Now</Link>
             </div>}
         </>
         :

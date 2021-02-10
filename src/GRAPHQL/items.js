@@ -59,3 +59,20 @@ export const TOGGLE_FAV = gql`
         }
     }
 `
+
+export const GET_FAV_ITEMS = gql`
+    query{
+        user{
+            favouriteItems{
+                id
+                name
+                brand{
+                    name
+                }
+                description
+                thumbnail
+                price
+            }
+        }
+    }
+`

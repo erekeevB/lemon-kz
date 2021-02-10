@@ -104,7 +104,7 @@ const Profile = ({ profile, isAuth, editProfileThunk, setAuth, ...props }) => {
                                     className={s.profile__radioLabel + ' ' + s.profile__radioLabel_first} 
                                     htmlFor='m'
                                 >
-                                    Man
+                                    Men
                                 </label>
                                 <Field
                                     id='j'
@@ -115,7 +115,7 @@ const Profile = ({ profile, isAuth, editProfileThunk, setAuth, ...props }) => {
                                     checked={values.sex === 'j'}
                                 />
                                 <label className={s.profile__radioLabel} htmlFor='j'>
-                                    Woman
+                                    Women
                                 </label>
                             </div>
                         </div>

@@ -70,6 +70,12 @@
 
 }
 
+.cart__delete:disabled svg {
+
+    color: black;
+
+}
+
 .cart__delete svg{
 
     stroke-width: 2;

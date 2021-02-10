@@ -20,7 +20,7 @@ const RouterComponent = ({isInitialized}) => {
                 <Route path='/404' render={()=> <div>404</div>} />
                 <Route path='/' render={() => <Main />} />
             </Switch> :
-            <div>Loading...</div>
+            <div>Loading... APP</div>
             }
         </div>
     )

@@ -1,5 +1,3 @@
-import { getFavouritesAPI } from "../api/authAPI";
-
 const SET_AUTH = 'SET_AUTH';
 const SET_QTY = 'SET_QTY';
 
@@ -16,9 +14,7 @@ let initialState = {
         sex: null,
         cartQty: null
     },
-    favourites: [],
-    isAuth: 0,
-    error: null
+    isAuth: 0
 
 }
 

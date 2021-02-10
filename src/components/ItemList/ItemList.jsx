@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import { HeartIcon, HeartIconFilled } from '../../assets/Icons';
-import { GET_ITEMS, TOGGLE_FAV } from '../../GRAPHQL/items';
+import { GET_FAV_ITEMS, GET_ITEMS, TOGGLE_FAV } from '../../GRAPHQL/items';
 import SignInWarning from '../SignInWarning/SignInWarning';
 import queryString from 'query-string';
 import s from './ItemList.module.css';
@@ -20,15 +20,11 @@ const CategoryList = ({isAuth}) => {
 
     const [toggleFavourite] = useMutation(TOGGLE_FAV, {
         onCompleted: data=>{
-            debugger
             if(data?.toggleFav.success){
                 refetch()
             }
         },
-        onError: err=>{
-            debugger
-            console.log(err.message)
-        }
+        refetchQueries: [{query: GET_FAV_ITEMS}]
     })
 
     const [isLikeClickedAndNotAuth, setIsLikeClickedAndNotAuth] = useState(false)
@@ -37,7 +33,9 @@ const CategoryList = ({isAuth}) => {
         setQuery(queryString.parse(location.search))
     }, [location.search])
 
-    
+    useEffect(()=>{
+        refetch()
+    }, [isAuth])
 
     const handleFavouriteButton = (id) => {
         if(isAuth){

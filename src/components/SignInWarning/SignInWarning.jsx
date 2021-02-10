@@ -1,18 +1,20 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { CloseIcon } from '../../assets/Icons'
 import s from './SignInWarning.module.css'
 
 const SignInWarning = ({state, setState, text}) => {
 
+    let [timeoutID, setTimeoutID] = useState(null)
+
     useEffect(()=>{
         if(state){
-            setTimeout(()=>{
+            setTimeoutID(setTimeout(()=>{
                 setState(bool=>{
                     if(bool){
                         return false
                     }
                 })
-            }, 3000)
+            }, 3000))
         }
     }, [state])
 
@@ -21,7 +23,10 @@ const SignInWarning = ({state, setState, text}) => {
         {state && 
             <div className={s.auth_warning}>
                 <button 
-                    onClick={()=>setState(false)} 
+                    onClick={()=>{
+                        clearTimeout(timeoutID)
+                        setState(false)
+                    }} 
                     className={s.auth_warning__close}><CloseIcon />
                 </button>
                 <div>Sign In to {text}</div>

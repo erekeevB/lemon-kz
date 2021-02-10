@@ -34,7 +34,6 @@ mutation($id: ID!, $qty: Int!){
 export const REMOVE_FROM_CART = gql`
 mutation($id: ID!){
     mutateCart(itemId: $id, add: false){
-        ${cartItem}
         cartQty
         error
     }

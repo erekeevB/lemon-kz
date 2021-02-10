@@ -1,10 +1,10 @@
 import { useMutation, useQuery } from '@apollo/client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { HeartIcon, HeartIconFilled, MinusIcon, PlusIcon } from '../../assets/Icons';
 import { ADD_TO_CART, GET_CART_ITEMS } from '../../GRAPHQL/cart';
-import { GET_SINGLE_ITEM, TOGGLE_FAV } from '../../GRAPHQL/items';
+import { GET_FAV_ITEMS, GET_SINGLE_ITEM, TOGGLE_FAV } from '../../GRAPHQL/items';
 import { setQty } from '../../redux/authReducer';
 import SignInWarning from '../SignInWarning/SignInWarning';
 import s from './ItemPage.module.css'
@@ -13,11 +13,7 @@ const ItemPage = ({ id, isAuth, setQty }) => {
 
     const {data, loading, refetch} = useQuery(GET_SINGLE_ITEM, {
         variables: {id: id},
-        onCompleted: data => {
-            debugger
-            console.log(data)
-        },
-        onError: err => {
+        onError: err=>{
             debugger
             console.log(err.message)
         }
@@ -29,7 +25,8 @@ const ItemPage = ({ id, isAuth, setQty }) => {
             if(data?.toggleFav.success){
                 refetch()
             }
-        }
+        },
+        refetchQueries: [{query: GET_FAV_ITEMS}]
     })
 
     const [addToCart, {loading: buttonIsFetching}] = useMutation(ADD_TO_CART, {
@@ -40,13 +37,18 @@ const ItemPage = ({ id, isAuth, setQty }) => {
             }
             
         },
-        refetchQueries: GET_CART_ITEMS,
+        refetchQueries: [{query: GET_CART_ITEMS}],
         awaitRefetchQueries: true
     })
 
     const [isLikeClickedAndNotAuth, setIsLikeClickedAndNotAuth] = useState(false)
 
     const [quantity, setQuantity] = useState(1)
+
+    useEffect(()=>{
+        debugger
+        refetch()
+    }, [isAuth])
 
     const handleFavouriteButton = () => {
         if (isAuth) {
