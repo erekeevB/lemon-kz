@@ -1,18 +1,13 @@
 import { useMutation, useQuery } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { HeartIcon, HeartIconFilled } from '../../assets/Icons';
 import { GET_FAV_ITEMS, GET_ITEMS, TOGGLE_FAV } from '../../GRAPHQL/items';
 import SignInWarning from '../SignInWarning/SignInWarning';
-import queryString from 'query-string';
 import s from './ItemList.module.css';
 
-const CategoryList = ({isAuth}) => {
-
-    let location = useLocation()
-
-    const [query, setQuery] = useState(queryString.parse(location.search))
+const CategoryList = ({isAuth, query}) => {
 
     const {data, loading, refetch} = useQuery(GET_ITEMS, {
         variables: {...query}
@@ -29,9 +24,6 @@ const CategoryList = ({isAuth}) => {
 
     const [isLikeClickedAndNotAuth, setIsLikeClickedAndNotAuth] = useState(false)
 
-    useEffect(()=>{
-        setQuery(queryString.parse(location.search))
-    }, [location.search])
 
     useEffect(()=>{
         refetch()
@@ -70,7 +62,6 @@ const CategoryList = ({isAuth}) => {
                                         }
                                     </button>
                                 </div>
-                                {/* <button className={s.item__openHere}>Open Here</button> */}
                                 <Link to={'/item/'+el.id} className={s.item}>
                                     <div className={s.item__image}>
                                         <img src={el.thumbnail} alt={el.brand.name+' '+el.name} />
@@ -78,10 +69,6 @@ const CategoryList = ({isAuth}) => {
                                     <div className={s.item__bottom}>
                                         <div className={s.item__price}>${el.price}</div>
                                         <div className={s.item__title}>{el.brand.name} {el.name}</div>
-                                        {/* <div className={s.item__buttons}>
-                                            <button>More</button>
-                                            <button>Add to Card</button>
-                                        </div> */}
                                     </div>
                                 </Link>
                             </div>

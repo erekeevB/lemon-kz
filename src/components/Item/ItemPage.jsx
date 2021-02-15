@@ -13,6 +13,11 @@ const ItemPage = ({ id, isAuth, setQty }) => {
 
     const {data, loading, refetch} = useQuery(GET_SINGLE_ITEM, {
         variables: {id: id},
+        onCompleted: data=>{
+            if(data.singleItem.qty>1){
+                setQuantity(data.singleItem.qty)
+            }
+        },
         onError: err=>{
             debugger
             console.log(err.message)
@@ -46,7 +51,6 @@ const ItemPage = ({ id, isAuth, setQty }) => {
     const [quantity, setQuantity] = useState(1)
 
     useEffect(()=>{
-        debugger
         refetch()
     }, [isAuth])
 

@@ -5,6 +5,7 @@ import { setAuth } from '../../redux/authReducer';
 import s from './Authentication.module.css'
 import { connect } from 'react-redux';
 import { useMutation } from '@apollo/client';
+import {client} from '../../index';
 import { LOGIN } from '../../GRAPHQL/auth';
 
 
@@ -17,6 +18,7 @@ const Authorization = ({ setLogin, isLogin, setAuth, isAuth, ...props }) => {
                 localStorage.setItem("token", data.tokenAuth.token)
                 setAuth(data.tokenAuth.user, 1)
                 closeAuth(0, 'unset')
+                client.resetStore()
             }
         }
     })

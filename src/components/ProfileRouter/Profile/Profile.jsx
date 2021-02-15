@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Redirect } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import s from './Profile.module.css'
 import ProfilePhoto from './../../../assets/profilePhoto.png'
 import { Field, Form, Formik } from 'formik'
@@ -11,17 +11,26 @@ import { UPDATE_USER } from '../../../GRAPHQL/auth'
 
 const Profile = ({ profile, isAuth, editProfileThunk, setAuth, ...props }) => {
 
+    let history = useHistory()
+
+    if(!isAuth){
+        history.push('/404')
+    }
+
     const [updateUser] = useMutation(UPDATE_USER, {
         onCompleted: data=>{
             if(data?.updateUser.user){
                 setAuth(data.updateUser.user, 1)
             }
+        },
+        onError: err=>{
+            debugger
+            console.log(err.message)
         }
     })
 
     return (
         <>
-            {!isAuth && <Redirect to='/' />}
             <h2 className={s.profile__header}>My Account</h2>
             <div className={s.profile__info}>
                 <div className={s.profile__photo}><img src={ProfilePhoto} alt="Profile" /></div>
@@ -58,7 +67,7 @@ const Profile = ({ profile, isAuth, editProfileThunk, setAuth, ...props }) => {
                 onSubmit={(values, { setSubmitting }) => {
                     debugger
                     setSubmitting(true);
-                    updateUser({variables: {...values}})
+                    updateUser({variables: {...values, phoneNumber: values.phoneNumber.toString()}})
                     setSubmitting(false);
                 }}
 
@@ -85,6 +94,14 @@ const Profile = ({ profile, isAuth, editProfileThunk, setAuth, ...props }) => {
                                 />
                             </div>
                         </div>
+                        <div className={s.profile__nameForm__header}>
+                            <Field 
+                                name='phoneNumber' 
+                                type='number' 
+                                placeholder='Phone Number'
+                                component={InputComponent} 
+                            />
+                        </div>
                         <div className={s.profile__radioWrapper__parent}>
                             <div className={s.profile__radioWrapper}>
                                 <span 
@@ -107,14 +124,14 @@ const Profile = ({ profile, isAuth, editProfileThunk, setAuth, ...props }) => {
                                     Men
                                 </label>
                                 <Field
-                                    id='j'
+                                    id='w'
                                     className={s.profile__radio}
                                     type="radio"
                                     name="sex"
-                                    value="j"
-                                    checked={values.sex === 'j'}
+                                    value="w"
+                                    checked={values.sex === 'w'}
                                 />
-                                <label className={s.profile__radioLabel} htmlFor='j'>
+                                <label className={s.profile__radioLabel} htmlFor='w'>
                                     Women
                                 </label>
                             </div>

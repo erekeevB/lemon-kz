@@ -1,9 +1,8 @@
 import { useQuery } from '@apollo/client';
 import { useState } from 'react';
 import { connect } from 'react-redux';
+import { Link, Route, Switch } from 'react-router-dom';
 import './App.css';
-import Footer from './components/Footer/Footer';
-import Header from './components/Header/Header';
 import RouterComponent from './components/RouterComponent/RouterComponent';
 import { GET_ME } from './GRAPHQL/auth';
 import { setAuth } from './redux/authReducer';
@@ -26,9 +25,10 @@ function App({setAuth}) {
 
     return (
         <div className="App">
-            <Header />
-            <RouterComponent isInitialized={isInitialized} />
-            <Footer />
+            <Switch>
+                <Route path='/404' exact render={()=><div><Link to='/' >Go to main</Link> 404</div>} />
+                <Route path='/' render={()=><RouterComponent isInitialized={isInitialized} />} />
+            </Switch>
         </div>
     );
 }

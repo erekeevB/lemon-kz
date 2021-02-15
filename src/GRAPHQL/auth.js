@@ -27,7 +27,6 @@ export const REGISTER = gql`
     mutation($username: String!, $password1: String!, $password2: String!,$email:String!){
         register(email: $email, username: $username, password1: $password1, password2:$password2){
             message
-            errors
         }
     }
 `
@@ -39,10 +38,23 @@ export const GET_ME = gql`
 `
 
 export const UPDATE_USER = gql`
-    mutation($username: String, $firstName: String, $lastName: String, $email: String ){
-        updateUser(username: $username, firstName: $firstName, lastName: $lastName, email: $email){
+    mutation(
+        $username: String, 
+        $firstName: String, 
+        $lastName: String, 
+        $email: String, 
+        $sex: String, 
+        $phoneNumber: String
+    ){
+        updateUser(
+            username: $username, 
+            firstName: $firstName, 
+            lastName: $lastName, 
+            email: $email, 
+            sex: $sex,
+            phoneNumber: $phoneNumber
+        ){
             ${user}
-            error
         }
     }
 `

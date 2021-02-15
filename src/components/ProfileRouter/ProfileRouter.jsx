@@ -5,7 +5,7 @@ import Profile from './Profile/Profile'
 import ProfileFavourites from './ProfileFavourites/ProfileFavourites'
 import s from './ProfileRouter.module.css'
 
-const ProfileRouter = ({isAuth, ...props}) => {
+const ProfileRouter = ({isAuth}) => {
     return (
         <>
         {!isAuth && <Redirect to='/' />}
@@ -19,7 +19,8 @@ const ProfileRouter = ({isAuth, ...props}) => {
             <div className={s.profile__container}>
                 <Switch>
                     <Route path='/profile' exact render={()=><Profile />} />
-                    <Route path='/profile/favorites' render={()=><ProfileFavourites />} />
+                    <Route path='/profile/favorites' exact render={()=><ProfileFavourites />} />
+                    <Redirect to='/404' />
                 </Switch>
             </div>
         </div>

@@ -43,7 +43,7 @@ const Login = ({ closeAuth, loading, error, login }) => {
                     <div className={s.form__body}>
 
                         <div className={s.form__names}>
-                            <Field placeholder='Username' type="text" name="username" component={InputComponent} />
+                            <Field placeholder='Username' autoFocus type="text" name="username" component={InputComponent} />
                         </div>
                         <div className={s.form__names}>
                             <Field placeholder='Пароль' type="password" name="password" component={InputComponent} />

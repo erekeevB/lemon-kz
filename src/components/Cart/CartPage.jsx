@@ -3,15 +3,22 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import { CloseIcon } from '../../assets/Icons';
-import { GET_CART_ITEMS, REMOVE_FROM_CART } from '../../GRAPHQL/cart';
+import { GET_CART_ITEMS, MUTATE_CART_ITEM_QTY, REMOVE_FROM_CART } from '../../GRAPHQL/cart';
 import { GET_SINGLE_ITEM } from '../../GRAPHQL/items';
 import { setQty } from '../../redux/authReducer';
 import s from './CartPage.module.css'
 
 const CartPage = ({ isAuth, setQty }) => {
 
+    let history = useHistory()
+
+    if(!isAuth){
+        history.push('/')
+    }
+
     const {data, refetch} = useQuery(GET_CART_ITEMS, {
-        onCompleted: () => {
+        onCompleted: (data) => {
+            debugger
             setLoading(false)
         },
         onError: () =>{
@@ -21,6 +28,7 @@ const CartPage = ({ isAuth, setQty }) => {
 
     const [removeCartItem] = useMutation(REMOVE_FROM_CART, {
         onCompleted: data => {
+            debugger
             refetch()
             setQty(data.mutateCart.cartQty)
             setIsRemoveFetching(-1)
@@ -30,19 +38,52 @@ const CartPage = ({ isAuth, setQty }) => {
         }
     })
 
+    // useEffect(()=>{
+    //     refetch()
+    // }, [])
+
+    const [mutateItemQty] = useMutation(MUTATE_CART_ITEM_QTY, {
+        update(cache, {data, errors}){
+            if(!errors){
+                let item = cache.readQuery({
+                    query: GET_SINGLE_ITEM, 
+                    variables: {id: data.mutateCartItemQty.id}})
+                if(item && item.singleItem){
+                    cache.writeQuery({
+                        query: GET_SINGLE_ITEM, 
+                        variables: {id: data.mutateCartItemQty.id}, 
+                        data: {
+                            singleItem: {...item.singleItem, qty: data.mutateCartItemQty.qty}
+                        }})
+                }
+                let user = cache.readQuery({query: GET_CART_ITEMS})
+                if (user && user.user){
+                    cache.writeQuery({
+                        query: GET_CART_ITEMS, 
+                        data: {
+                            user: {
+                                cartItems: user.user.cartItems.map(el=>{
+                                    if(el.id === data.mutateCartItemQty.id){
+                                        return {...el, qty: data.mutateCartItemQty.qty}
+                                    }
+                                    return el
+                                })
+                            }
+                        }})
+                }else{
+                    refetch()
+                }
+            }
+        }
+    })
+
     let [loading, setLoading] = useState(true)
 
     let [isRemoveFetching, setIsRemoveFetching] = useState(-1)
 
-    let history = useHistory()
-
-    useEffect(() => {
-        if(!isAuth){
-            history.push('/')
-        }else{
-            refetch()
-        }
-    }, [isAuth])
+    const handleSelect = (id, qty) => {
+        mutateItemQty({variables: {id, qty}})
+    }
 
     return (
     <>
@@ -65,12 +106,17 @@ const CartPage = ({ isAuth, setQty }) => {
                                     {el.brand.name} {el.name}
                                 </Link>
                                 <div className={s.cart__price}>${el.price}</div>
-                                <select>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
+                                <select onChange={(e)=>{handleSelect(el.id, e.target.value)}} value={el.qty}>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                    <option>8</option>
+                                    <option>9</option>
+                                    <option>10</option>
                                 </select>
                                 <button
                                     onClick={() => {
