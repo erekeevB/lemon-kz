@@ -10,7 +10,7 @@ let UserInfo = ({setProfileNav, setLogin, isAuth, profile, setAuth}) => {
     const logout = () => {
 
         localStorage.removeItem('token')
-        client.clearStore()
+        client.clearStore().then(()=>client.resetStore())
         setAuth({}, 0)
 
     }

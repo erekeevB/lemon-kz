@@ -1,0 +1,47 @@
+.paginator {
+
+    width: 100%;
+    display: flex;
+    padding: 10px 0;
+    justify-content: flex-end;
+    column-gap: 5px;
+
+}
+
+.paginator button {
+
+    width: 30px;
+    height: 30px;
+    border: 2px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+}
+
+.paginator__button_active {
+
+    background-color: black;
+    color: white;
+
+}
+
+.paginator button svg {
+
+    width: 15px;
+    height: 15px;
+
+}
+
+.paginator__prev svg {
+
+    transform: rotate(90deg);
+
+}
+
+.paginator__next svg {
+
+    transform: rotate(-90deg);
+
+}

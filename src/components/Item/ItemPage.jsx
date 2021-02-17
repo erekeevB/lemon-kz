@@ -5,15 +5,17 @@ import { Link } from 'react-router-dom';
 import { HeartIcon, HeartIconFilled, MinusIcon, PlusIcon } from '../../assets/Icons';
 import { ADD_TO_CART, GET_CART_ITEMS } from '../../GRAPHQL/cart';
 import { GET_FAV_ITEMS, GET_SINGLE_ITEM, TOGGLE_FAV } from '../../GRAPHQL/items';
-import { setQty } from '../../redux/authReducer';
 import SignInWarning from '../SignInWarning/SignInWarning';
 import s from './ItemPage.module.css'
 
-const ItemPage = ({ id, isAuth, setQty }) => {
+const ItemPage = ({ id, isAuth }) => {
+
+    const [quantity, setQuantity] = useState(1)
 
     const {data, loading, refetch} = useQuery(GET_SINGLE_ITEM, {
         variables: {id: id},
         onCompleted: data=>{
+            debugger
             if(data.singleItem.qty>1){
                 setQuantity(data.singleItem.qty)
             }
@@ -35,20 +37,30 @@ const ItemPage = ({ id, isAuth, setQty }) => {
     })
 
     const [addToCart, {loading: buttonIsFetching}] = useMutation(ADD_TO_CART, {
-        onCompleted: data=>{
-            if(!data?.mutateCart.error){
-                setQty(data.mutateCart.cartQty)
-                refetch()
-            }
-            
-        },
         refetchQueries: [{query: GET_CART_ITEMS}],
-        awaitRefetchQueries: true
+        awaitRefetchQueries: true,
+        update(cache, {data}){
+            if(!data?.mutateCart.error){
+                let data = cache.readQuery({query: GET_SINGLE_ITEM, variables: {id: id}})
+                if(data && data.singleItem){
+                    cache.writeQuery({
+                        query: GET_SINGLE_ITEM, 
+                        variables: {id: id}, 
+                        data: {
+                            ...data,
+                            singleItem: {
+                                ...data.singleItem,
+                                qty: quantity
+                            }
+                        }})
+                }
+            }
+        }
     })
 
     const [isLikeClickedAndNotAuth, setIsLikeClickedAndNotAuth] = useState(false)
 
-    const [quantity, setQuantity] = useState(1)
+    const [text, setText] = useState('')
 
     useEffect(()=>{
         refetch()
@@ -58,6 +70,7 @@ const ItemPage = ({ id, isAuth, setQty }) => {
         if (isAuth) {
             toggleFavourite()
         } else {
+            setText('Add Items to Favourite!')
             setIsLikeClickedAndNotAuth(true)
         }
     }
@@ -66,6 +79,7 @@ const ItemPage = ({ id, isAuth, setQty }) => {
         if (isAuth) {
             addToCart({variables: {id, qty}})
         } else {
+            setText('Add Items to Cart!')
             setIsLikeClickedAndNotAuth(true)
         }
     }
@@ -77,7 +91,7 @@ const ItemPage = ({ id, isAuth, setQty }) => {
                     <SignInWarning
                         state={isLikeClickedAndNotAuth}
                         setState={setIsLikeClickedAndNotAuth}
-                        text={'Add Items to Favourite!'}
+                        text={text}
                     />
                     <div className={s.item__wrapper}>
                         <div className={s.item__category}>
@@ -158,6 +172,24 @@ const ItemPage = ({ id, isAuth, setQty }) => {
                             <p>Description</p>
                             {data.singleItem.description}
                         </div>
+                        <div className={s.item__desc}>
+                            <p>Reviews</p>
+                            {data.singleItem.reviewSet.length? 
+                                <div>
+                                    {data.singleItem.reviewSet.map((el)=>{
+                                        return(
+                                            <div>
+                                                <p>{el.author.username}</p>
+                                                <div>{el.star} Stars</div>
+                                                <div>{el.text}</div>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            :
+                                <div>No Reviews</div>
+                            }
+                        </div>
                         {data.singleItem.review}
                     </div>
                 </>
@@ -171,4 +203,4 @@ let mStP = (state) => ({
     isAuth: state.auth.isAuth
 })
 
-export default connect(mStP, {setQty})(ItemPage)
+export default connect(mStP, {})(ItemPage)

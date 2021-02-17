@@ -18,7 +18,8 @@ const Authorization = ({ setLogin, isLogin, setAuth, isAuth, ...props }) => {
                 localStorage.setItem("token", data.tokenAuth.token)
                 setAuth(data.tokenAuth.user, 1)
                 closeAuth(0, 'unset')
-                client.resetStore()
+                debugger
+                client.clearStore().then(()=>client.resetStore())
             }
         }
     })

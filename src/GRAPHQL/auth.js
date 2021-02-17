@@ -10,7 +10,6 @@ const user = `
         lastName
         sex
         phoneNumber
-        cartQty
     }
 `
 
@@ -34,6 +33,14 @@ export const REGISTER = gql`
 export const GET_ME = gql`
     query{
         ${user}
+    }
+`
+
+export const GET_USER_CART_QTY = gql`
+    query{
+        user{
+            cartQty
+        }
     }
 `
 

@@ -13,7 +13,8 @@ export const GET_ITEMS = gql`
                 thumbnail
                 isFavourite
             }
-            hasNext
+            pages
+            currentPage
         }
     }
 `

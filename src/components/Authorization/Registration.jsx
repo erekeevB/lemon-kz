@@ -12,9 +12,11 @@ const Registration = ({closeAuth, login}) => {
 
     const [register] = useMutation(REGISTER, {
         onError: errors=>{
+            debugger
             setError(errors.message)
         },
         onCompleted: data=>{
+            debugger
             if(data.errors){
                 setError(data.errors)
             }
@@ -56,13 +58,13 @@ const Registration = ({closeAuth, login}) => {
             {({ isSubmitting }) => (
                 <Form className={s.authentication__form}>
                     <div className={s.form__heading}>
-                        <div className={s.form__name}>Регистрация</div>
+                        <div className={s.form__name}>Sign Up</div>
                         <div className={s.form__close} onClick={()=>closeAuth(0, 'unset')}><CloseIcon /></div>
                     </div>
 
                     <div className={s.form__body}>
                         <div className={s.form__names}>
-                            <Field type="email" name="email" placeholder='Email' component={InputComponent}/>
+                            <Field type="email" name="email" autoFocus placeholder='Email' component={InputComponent}/>
                         </div>
                         <div className={s.form__names}>
                             <Field type="text" name="username" placeholder='Username' component={InputComponent}/>
@@ -79,11 +81,11 @@ const Registration = ({closeAuth, login}) => {
                     </div>
 
                     <div><button className={s.form__submit} type="submit" disabled={isSubmitting}>
-                        Создать Аккаунт
+                        Create an Account
                         </button></div>
                     <div className={s.form__redirect} onClick={(e)=>{
-                            e.preventDefault()
-                            }}>Войти
+                            closeAuth(1, 'hidden')
+                            }}>Sign In
                     </div>
                 </Form>
             )}

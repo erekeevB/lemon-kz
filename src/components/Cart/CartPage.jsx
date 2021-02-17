@@ -1,14 +1,13 @@
 import { useMutation, useQuery } from '@apollo/client';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import { CloseIcon } from '../../assets/Icons';
 import { GET_CART_ITEMS, MUTATE_CART_ITEM_QTY, REMOVE_FROM_CART } from '../../GRAPHQL/cart';
 import { GET_SINGLE_ITEM } from '../../GRAPHQL/items';
-import { setQty } from '../../redux/authReducer';
 import s from './CartPage.module.css'
 
-const CartPage = ({ isAuth, setQty }) => {
+const CartPage = ({ isAuth }) => {
 
     let history = useHistory()
 
@@ -16,21 +15,11 @@ const CartPage = ({ isAuth, setQty }) => {
         history.push('/')
     }
 
-    const {data, refetch} = useQuery(GET_CART_ITEMS, {
-        onCompleted: (data) => {
-            debugger
-            setLoading(false)
-        },
-        onError: () =>{
-            setLoading(false)
-        }
-    })
+    const {data, refetch, loading} = useQuery(GET_CART_ITEMS)
 
     const [removeCartItem] = useMutation(REMOVE_FROM_CART, {
         onCompleted: data => {
-            debugger
             refetch()
-            setQty(data.mutateCart.cartQty)
             setIsRemoveFetching(-1)
         },
         onError: ()=>{
@@ -38,20 +27,14 @@ const CartPage = ({ isAuth, setQty }) => {
         }
     })
 
-    // useEffect(()=>{
-    //     refetch()
-    // }, [])
-
     const [mutateItemQty] = useMutation(MUTATE_CART_ITEM_QTY, {
         update(cache, {data, errors}){
             if(!errors){
-                let item = cache.readQuery({
-                    query: GET_SINGLE_ITEM, 
-                    variables: {id: data.mutateCartItemQty.id}})
+                let param = {query: GET_SINGLE_ITEM, variables: {id: data.mutateCartItemQty.id}}
+                let item = cache.readQuery({...param})
                 if(item && item.singleItem){
                     cache.writeQuery({
-                        query: GET_SINGLE_ITEM, 
-                        variables: {id: data.mutateCartItemQty.id}, 
+                        ...param, 
                         data: {
                             singleItem: {...item.singleItem, qty: data.mutateCartItemQty.qty}
                         }})
@@ -77,12 +60,28 @@ const CartPage = ({ isAuth, setQty }) => {
         }
     })
 
-    let [loading, setLoading] = useState(true)
-
     let [isRemoveFetching, setIsRemoveFetching] = useState(-1)
 
     const handleSelect = (id, qty) => {
         mutateItemQty({variables: {id, qty}})
+    }
+
+    const handleRemove = (el) => {
+        setIsRemoveFetching(el.id)
+        removeCartItem({ 
+            variables: { id: el.id },
+            update(cache, ){
+                let params = {query: GET_SINGLE_ITEM, variables: {id: el.id}}
+                let item = cache.readQuery({...params})
+                if(item){
+                    cache.writeQuery({...params,
+                        data: {
+                            singleItem: {...item, qty: 0}
+                        }
+                    })
+                }
+            }
+        })
     }
 
     return (
@@ -119,27 +118,7 @@ const CartPage = ({ isAuth, setQty }) => {
                                     <option>10</option>
                                 </select>
                                 <button
-                                    onClick={() => {
-                                        setIsRemoveFetching(el.id)
-                                        removeCartItem({ 
-                                            variables: { id: el.id },
-                                            update(cache, ){
-                                                let item = cache.readQuery({
-                                                    query: GET_SINGLE_ITEM, 
-                                                    variables: {id: el.id}
-                                                })
-                                                if(item){
-                                                    cache.writeQuery({
-                                                        query: GET_SINGLE_ITEM,
-                                                        variables: {id: el.id},
-                                                        data: {
-                                                            singleItem: {...item, qty: 0}
-                                                        }
-                                                    })
-                                                }
-                                            }
-                                        })
-                                    }}
+                                    onClick={() => handleRemove(el)}
                                     disabled={isRemoveFetching > 0}
                                     className={s.cart__delete}
                                 >
@@ -186,4 +165,4 @@ const mStP = (state) => ({
 
 })
 
-export default connect(mStP, { setQty })(CartPage)
+export default connect(mStP, {})(CartPage)

@@ -6,11 +6,15 @@ import { connect } from 'react-redux'
 import { Link, useHistory } from 'react-router-dom'
 import SignInWarning from '../SignInWarning/SignInWarning'
 import ProfileNav from './ProfileNav/ProfileNav'
+import { useQuery } from '@apollo/client'
+import { GET_USER_CART_QTY } from '../../GRAPHQL/auth'
 
-const Header = function({isAuth, cartQty}){
+const Header = function({isAuth}){
     let [isLangWindow, setLangWindow] = useState(0)
 
     const [isCartAndNotAuth, setIsCartAndNotAuth] = useState(false)
+
+    const {data: cartQty, loading} = useQuery(GET_USER_CART_QTY)
 
     let history = useHistory()
 
@@ -39,7 +43,9 @@ const Header = function({isAuth, cartQty}){
                         <button onClick={()=>setLangWindow(true)}><GlobeIcon /></button>
                         <button className={s.header__cart} onClick={handleCartButton}>
                             <CartIcon />
-                            {cartQty ? <div className={s.header__cart__length}>{cartQty}</div> : null}
+                            {cartQty && cartQty.user && cartQty.user.cartQty ? 
+                                <div className={s.header__cart__length}>{cartQty.user.cartQty}</div> 
+                                : null}
                         </button>
                         <ProfileNav />
                     </div>

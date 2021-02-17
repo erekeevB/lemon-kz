@@ -4,7 +4,7 @@ import s from './ItemList.module.css'
 import queryString from 'query-string';
 import { useHistory } from 'react-router-dom';
 
-const CategoryListRouter = () => {
+const ItemListRouter = () => {
 
     let history = useHistory()
 
@@ -14,10 +14,19 @@ const CategoryListRouter = () => {
         setQuery(queryString.parse(history.location.search))
     }, [history.location.search])
 
-    const handleFilter = () => {
+    useEffect(()=>{
 
         history.push('/items?' + queryString.stringify(query))
 
+    }, [query.page])
+
+    const handleFilter = () => {
+        setQuery(prev=>{
+            return{
+                ...prev,
+                page: 1
+            }
+        })
     }
 
     return (
@@ -33,8 +42,11 @@ const CategoryListRouter = () => {
                                     className={s.filter__radio} 
                                     name='Category' 
                                     type='radio' 
-                                    value='Clothes'
-                                    onChange={(e)=>{setQuery(prev=>({...prev, category: null}))}}
+                                    value='All'
+                                    onChange={(e)=>{setQuery(prev=>{
+                                        let {category, ...temp} = prev
+                                        return {...temp}
+                                    })}}
                                 />
                                 <div className={s.filter__name}>All</div>
                             </label>
@@ -73,7 +85,10 @@ const CategoryListRouter = () => {
                                     name='Brand' 
                                     type='radio'
                                     value='All'
-                                    onChange={(e)=>{setQuery(prev=>({...prev, brand: null}))}}
+                                    onChange={(e)=>{setQuery(prev=>{
+                                        let {brand, ...temp} = prev
+                                        return {...temp}
+                                    })}}
                                 />
                                 <div className={s.filter__name}>All</div>
                             </label>
@@ -108,7 +123,10 @@ const CategoryListRouter = () => {
                                     name='Sex' 
                                     type='radio'
                                     value='All'
-                                    onChange={(e)=>{setQuery(prev=>({...prev, sex: null}))}}
+                                    onChange={(e)=>{setQuery(prev=>{
+                                        let {sex, ...temp} = prev
+                                        return {...temp}
+                                    })}}
                                 />
                                 <div className={s.filter__name}>All</div>
                             </label>
@@ -157,13 +175,13 @@ const CategoryListRouter = () => {
                             />
                         </label>
                     </div>
-                    <button onClick={handleFilter}>Search</button>
+                    <button className={s.filter__search} onClick={handleFilter}>Search</button>
                 </div>
-                <ItemList query={queryString.parse(history.location.search)}/>
+                <ItemList query={queryString.parse(history.location.search)} setQuery={setQuery} />
             </div>
         </div>
     )
 
 }
 
-export default CategoryListRouter
+export default ItemListRouter

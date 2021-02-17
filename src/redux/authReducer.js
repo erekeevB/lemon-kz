@@ -46,6 +46,4 @@ const authReducer = (state = initialState, action) => {
 
 export const setAuth = (profile, isAuth) => ({ type: SET_AUTH, profile, isAuth });
 
-export const setQty = (qty) => ({ type: SET_QTY, qty})
-
 export default authReducer;
